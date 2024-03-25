@@ -1,0 +1,24 @@
+.dz-image img {
+    width: 120px;
+    object-fit: cover;
+    height: 120px;
+}
+
+.top-sub-bar .breadcrumb {
+    white-space: nowrap;
+    overflow: scroll;
+}
+
+
+.top-sub-bar .breadcrumb::-webkit-scrollbar {
+    display: none;
+}
+
+#custompreloader {
+    background-color: #fff !important;
+    width: 100vw;
+    z-index: 99999999;
+    height: 100vh;
+    position: fixed;
+    overflow: hidden;
+}

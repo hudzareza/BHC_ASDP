@@ -1,0 +1,168 @@
+@media (max-width: 468px) {
+	.hm_1 .beli-tiket {
+		padding: 16px 24px;
+		width: 100%;
+		position: relative;
+		top: unset;
+		left: unset;
+		text-align: center;
+		transform: unset;
+	}
+	.hm_1 .beli-tiket p a {
+		margin-left: 0px;
+		display: block;
+		margin-top: 8px;
+	}
+	.hm_2 {
+		margin-top: 150px;
+	}
+	ul.list-content li {
+		width: 100%;
+		margin-bottom: 16px;
+		margin-right: 0px;
+		display: block;
+		height: auto;
+	}
+	ul.list-content li:last-child {
+		margin-bottom: 0px;
+	}
+	ul.list-content li .card-1 {
+		width: 100%;
+	}
+	.inner-card-2 figure {
+		width: 100%;
+	}
+	.m-block {
+		display: block !important;
+	}
+	.hm_4 .lihatsemua {
+		flex: unset;
+		float: left;
+		text-align: left;
+		margin-top: 16px;
+		margin-bottom: 16px;
+	}
+	.info-bhc {
+		margin-bottom: 68px;
+	}
+	footer .col-md-2 {
+		margin-top: 16px;
+	}
+	footer .col-md-4 {
+		margin-top: 16px;
+	}
+	.hm_1 {
+		height: 250px;
+	}
+	.hm_1 .main-banner {
+		height: 250px;
+	}
+	.card-3 {
+		width: 100%;
+		margin-bottom: 16px;
+	}
+	.k_e_3 .col-md-3:nth-child(4) {
+		margin-bottom: 0px;
+	}
+	.k_e_3 .col-md-3:nth-child(8) {
+		margin-bottom: 0px;
+	}
+	.content-artikel figure {
+		width: 100%;
+		height: 250px;
+	}
+	.inner_k_e_1 {
+		width: 100%;
+	}
+	.content-artikel .d-flex {
+		display: block!important;
+	}
+	.gallery ul li {
+		margin-right: 0px;
+		text-align: center;
+		margin: auto;
+		display: block;
+	}
+	.gallery ul li figure {
+		width: 100%;
+		margin-bottom: 16px;
+	}
+	.mfp-figure {
+		height: 100%;
+	}
+	.mfp-figure figure {
+		margin: 50% auto;
+		width: 90%;
+		height: -webkit-fill-available;
+	}
+	.mfp-figure figure img {
+		height: 50%;
+	}
+	.mfp-wrap {
+		top: 0px !important;
+	}
+	.list-tiket .d-flex {
+		display: block!important;
+	}
+	ul.list-tiket-content {
+		width: 100%;
+	}
+	ul.list-tiket-content li:last-child {
+		margin-right: 0px;
+		text-align: left;
+		float: left;
+	}
+	ul.list-tiket-content li {
+		display: block;
+		margin-right: 0px;
+		margin-bottom: 12px;
+		text-align: center;
+		width: 100%;
+	}
+	.list-tiket .fill-flex {
+		display: -webkit-box;
+		width: 100%;
+		margin: 0px;
+	}
+	.list-tiket-content a.btn-green {
+		width: 100%;
+		display: block;
+	}
+	img.img-logo-tiket {
+		height: 70px;
+	}
+	.widget-plugin {
+		width: 100%;
+		margin: auto;
+	}
+	.hidemobile {
+		display: none !important;
+	}
+	.form-kontak {
+		width: 100% !important;
+	}
+	.list-kontak ul li {
+		display: block;
+		vertical-align: top;
+		width: 100%;
+		border-left: unset;
+		height: 100%;
+		text-align: center;
+		margin-bottom: 24px;
+	}
+	.list-kontak ul.vertical li {
+		display: inline;
+	}
+	p.error-green-1 {
+		line-height: 80px;
+	}
+	.m-mt-4 {
+		margin-bottom: 44px;
+	}
+	.morder-1 {
+		order: 1;
+	}
+	.morder-5 {
+		order: 5;
+	}
+}

@@ -1,0 +1,42 @@
+.akhlak {
+    height: 30px;
+    margin-right: 5px;
+}
+
+.bpanduan {
+    margin-left: 130px;
+}
+
+.msosial {
+    margin-left: 230px;
+}
+
+.isosial {
+    margin-left:230px;
+}
+
+
+@media screen and (max-width: 600px) {
+    .akhlak {
+        margin-right: 0px !important;
+        margin-top: 100px !important;
+    }
+
+    .bpanduan {
+        margin-left: -20px !important;
+    }
+
+    .isosial {
+        margin-left: 0px;
+    }
+
+    .mobile-up{
+        position: relative;
+        float: left;
+        direction: rtl;
+    }
+
+    /* .profil-mobile{
+        display: none;
+    } */
+  }

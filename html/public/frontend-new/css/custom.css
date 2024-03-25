@@ -1,0 +1,378 @@
+body{
+  font-family:'Montserrat' !important;
+}
+.bg-gradient-primary {
+    background: rgb(46,172,141) !important;
+    background: linear-gradient(-90deg, rgba(46,172,141,1) 0%, rgba(112,195,163,1) 50%, rgba(128,197,166,1) 100%) !important;
+}
+.bg-gradient-secondary {
+    background: rgb(37,63,142) !important;
+    background: linear-gradient(-90deg, rgba(37,63,142,1) 0%, rgba(102,196,178,1) 100%) !important;
+}
+.bg-light-green {
+    background: var(--Light-Green, #A8DA9D) !important;
+}
+.bg-tosca {
+    background: var(--Tosca, #66C4B2) !important;
+}
+.bg-blue {
+    background: var(--Blue, #253F8E) !important;
+}
+.bg-primary {
+    background: var(--accent-primary, #205DAF) !important;
+}
+.bg-default {
+    background: var(--surface-surface-dim, #D9DADC) !important;
+}
+.bg-danger {
+    background: var(--accent-error, #BA1A1A) !important;
+}
+.bg-success {
+    background: var(--accent-tertiary, #006E1A) !important;
+}
+
+/* Start For Owl Carousel*/
+.owl-carousel .nav-btn{
+    height: 47px;
+    position: absolute;
+    width: 26px;
+    cursor: pointer;
+    /*top: 100px !important;*/
+  }
+  
+  .owl-carousel .owl-prev.disabled,
+  .owl-carousel .owl-next.disabled{
+  pointer-events: none;
+  opacity: 0.2;
+  }
+  
+  .owl-carousel .prev-slide{
+    left: 45%;
+    padding-top: 4px;
+  }
+  .owl-carousel .next-slide{
+    right: 45%;
+    padding-top: 4px;
+  }
+
+  .owl-carousel .prev-slide-video{
+    left: 45%;
+  }
+  .owl-carousel .next-slide-video{
+    right: 45%;
+  }
+
+  .owl-carousel .prev-slide:hover{
+   background-position: 0px -53px;
+  }
+  .owl-carousel .next-slide:hover{
+  background-position: -24px -53px;
+  } 
+  .itemquick{
+    width:75% !important;
+    margin-left:30px !important;
+  }
+  .itemquickaccess{
+    width:85% !important;
+    margin-left:10px !important;
+  }
+  .itemquickaccessinovasi{
+    width:200px !important;
+    margin-left:200px !important;
+  }
+  .itemvideo{
+    width:100% !important;
+    margin-left:10px !important;
+  }
+  /* End For Owl Carousel*/
+
+  .presentation-page {
+    overflow-x: hidden;
+  }
+
+  .btn-viewall {
+    border-radius: 100px;
+    border: 1px solid var(--accent-primary, #205DAF);
+    height: 40px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    padding: 10px 24px;
+    gap: 8px;
+    flex: 1 0 0;
+    align-self: stretch;
+  }
+
+  .btn-detail {
+    border-radius: 100px;
+    border: 1px solid var(--accent-primary, #fff);
+    height: 40px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    gap: 8px;
+    width: 40%;
+    flex: 1 0 0;
+    align-self: stretch;
+  }
+
+  .txt-detail {
+    color: var(--accent-primary, #fff);
+    text-align: center;
+    font-family: Noto Sans;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+  }
+
+  .txt-viewall {
+    color: var(--accent-primary, #205DAF);
+    text-align: center;
+    font-family: Noto Sans;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+  }
+
+  .bg-gallery {
+    display: flex;
+    padding: 60px 47px 24px 47px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 32px;
+  }
+
+  .bg-ferizyan {
+    border-radius: 30px;
+    background: linear-gradient(270deg, #2EAC8D 34.04%, #70C3A3 80.36%, #80C5A6 100%);
+  }
+
+  .bg-event-day {
+    display: flex;
+    padding: 12px;
+    width:150px;
+    height:120px;
+    flex-direction: column;
+    align-items: center;
+    border-radius: var(--radius-s, 8px);
+    background: linear-gradient(270deg, #2EAC8D 34.04%, #70C3A3 80.36%, #80C5A6 100%);
+  }
+
+  .bg-img-event {
+    width: 154px;
+    height: 116px;
+    border-radius: var(--radius-s, 8px);
+  }
+
+  .boxBerita {
+    object-fit: cover;
+    object-position: 25% 25%;
+    justify-content: center;
+  }
+
+  figure {
+    max-width: 100%;
+  }
+
+  figure img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  html {
+    overflow-x: hidden;
+  }
+
+  @media only screen and (max-width: 600px) {
+    .image-header {
+      width: 46px !important;
+    }
+
+    .owl-carousel .prev-slide {
+      left: 40% !important;
+    }
+
+    .owl-carousel .next-slide {
+      right: 40% !important;
+    }
+
+    .img-gallery {
+      width: 313.789px !important;
+      height: 180.395px !important;
+    }
+    .slidernya {
+      height: 254px !important;
+    }
+    .itemnya {
+      width: 335.789px !important;
+      height: 180.395px !important;
+    }
+  }
+
+  @media only screen and (min-width: 600px) {
+    .image-header {
+      width: 60px !important;
+    }
+  }
+
+  /* Small devices (portrait tablets and large phones, 600px and up) */
+  @media only screen and (min-width: 768px) {
+    .image-header {
+      width: 70px !important;
+    }
+  }
+
+
+  /* Medium devices (landscape tablets, 768px and up) */
+  @media only screen and (min-width: 768px) {
+    .image-header img, svg {
+      width: 46px !important;
+    }
+  } 
+
+  /* Large devices (laptops/desktops, 992px and up) */
+  @media only screen and (min-width: 992px) {
+    .image-header img {
+      width: 46px !important;
+    }
+  } 
+
+  /* Extra large devices (large laptops and desktops, 1200px and up) */
+  @media only screen and (min-width: 1200px) {
+    .image-header {
+      width: 10% !important;
+    }
+  }
+
+  /* Aturan CSS khusus untuk ukuran layar ekstra kecil (XS) dengan lebar minimum 300px */
+  @media only screen and (max-width: 500px) {
+    .col-xs {
+      flex: 1 0 auto !important;
+      width: 100% !important;
+    }
+
+    .row-cols-xs-auto>* {
+      flex: 0 0 auto !important;
+      width: auto !important;
+    }
+
+    .row-cols-xs-1>* {
+      flex: 0 0 auto !important;
+      width: 100% !important;
+    }
+
+    .row-cols-xs-2>* {
+      flex: 0 0 auto !important;
+      width: 50% !important;
+    }
+
+    .row-cols-xs-3>* {
+      flex: 0 0 auto !important;
+      width: 33.333333% !important;
+    }
+
+    .row-cols-xs-4>* {
+      flex: 0 0 auto !important;
+      width: 25% !important;
+    }
+
+    .row-cols-xs-5>* {
+      flex: 0 0 auto !important;
+      width: 20% !important;
+    }
+
+    .row-cols-xs-6>* {
+      flex: 0 0 auto !important;
+      width: 16.666667% !important;
+    }
+
+    .col-xs-auto {
+      flex: 0 0 auto !important;
+      width: auto !important;
+    }
+
+    .col-xs-1 {
+      flex: 0 0 auto !important;
+      width: 8.333333% !important;
+    }
+
+    .col-xs-2 {
+      flex: 0 0 auto !important;
+      width: 16.666667% !important;
+    }
+
+    .col-xs-3 {
+      flex: 0 0 auto !important;
+      width: 25% !important;
+    }
+
+    .col-xs-4 {
+      flex: 0 0 auto !important;
+      width: 33.333333% !important;
+    }
+
+    .col-xs-5 {
+      flex: 0 0 auto !important;
+      width: 41.666667% !important;
+    }
+
+    .col-xs-6 {
+      flex: 0 0 auto !important;
+      width: 50% !important;
+    }
+
+    .col-xs-7 {
+      flex: 0 0 auto !important;
+      width: 58.333333% !important;
+    }
+
+    .col-xs-8 {
+      flex: 0 0 auto !important;
+      width: 66.666667% !important;
+    }
+
+    .col-xs-9 {
+      flex: 0 0 auto !important;
+      width: 75% !important;
+    }
+
+    .col-xs-10 {
+      flex: 0 0 auto !important;
+      width: 83.333333% !important;
+    }
+
+    .col-xs-11 {
+      flex: 0 0 auto !important;
+      width: 91.666667% !important;
+    }
+
+    .col-xs-12 {
+      flex: 0 0 auto !important;
+      width: 100% !important;
+    }
+  }
+
+.marquee-container {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.marquee-content {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee 10s linear infinite;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
