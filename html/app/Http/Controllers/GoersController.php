@@ -13,11 +13,11 @@ class GoersController extends Controller
         error_reporting(0);
         date_default_timezone_set('UTC');
 
-        $start_date = date('Y-m-d');
-        $end_date = date('Y-m-d');
+        // $start_date = date('Y-m-d');
+        // $end_date = date('Y-m-d');
 
-        // $start_date = '2023-11-20';
-        // $end_date = '2023-11-20';
+        $start_date = '2023-11-20';
+        $end_date = '2023-11-20';
 
         $auth = 'kf3AI7yNaUpIfK0eFnKBPaTgNEQA5l2Lfv91npULT1FT0wtEKqqJHvr33f2olsw5';
         $apikey = 'd2ecf23f-504b-4252-80e2-ed6a5800944d';
@@ -38,13 +38,14 @@ class GoersController extends Controller
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
         $response = curl_exec($ch);
-        if ($response == '0') {
+        $result = json_decode($response);
+
+        if ($result->code == '0') {
             $data = [
-                'kode' => http_response_code(400),
-                'status' => 'terlalu banyak request'
+                'status' => 'error',
+                'message' => 'terlalu banyak request'
             ];
         } else {
-            $result = json_decode($response);
             foreach ($result->data->values as $key => $value) {
                 $order_number = $value[0];
                 $item_content = $value[1];
@@ -53,14 +54,14 @@ class GoersController extends Controller
                 $item_total = $value[4];
                 $item_price = $value[5];
                 $item_total_price = $value[6];
-                $item_total_tax = $value[7];
-                $item_total_price_before_tax = $value[8];
-                $order_by = $value[9];
-                $status = $value[10];
-                $schedule_date = $value[11];
-                $schedule_datetime = $value[12];
-                $created_at = substr($value[13], 0, 19);
-                $payment_method = $value[14];
+                $item_total_tax = '';
+                $item_total_price_before_tax = '';
+                $order_by = '';
+                $status = $value[7];
+                $schedule_date = $value[8];
+                $schedule_datetime = $value[9];
+                $created_at = substr($value[10], 0, 19);
+                $payment_method = $value[11];
 
                 $find = DB::table('goers')
                     ->where('order_number', '=', $order_number)
@@ -71,8 +72,8 @@ class GoersController extends Controller
 
                 if (!empty($arrOutput)) {
                     $data = [
-                        'kode' => http_response_code(200),
-                        'status' => 'data sudah ada'
+                        'status' => 'error',
+                        'message' => 'data sudah ada'
                     ];
                 } else {
                     DB::table('goers')->insert([
@@ -94,14 +95,13 @@ class GoersController extends Controller
                     ]);
 
                     $data = [
-                        'kode' => http_response_code(200),
-                        'status' => 'berhasil insert'
+                        'status' => 'sukses',
+                        'message' => 'berhasil insert data'
                     ];
                 }
             }
-
-            return $data;
         }
+        return $data;
         curl_close($ch);
     }
 }
