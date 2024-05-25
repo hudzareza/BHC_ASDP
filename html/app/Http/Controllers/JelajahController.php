@@ -63,6 +63,8 @@ class JelajahController extends Controller
      */
     public function store(Request $request)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         // print_r($_POST);die();
         $berita = new Article;
 
@@ -76,8 +78,7 @@ class JelajahController extends Controller
         } else {
             $request->validate([
                 'photo' => 'required',
-                'gallery' => 'required',
-                '_token' => 'required|string',
+                'gallery' => 'max:6',
                 'title' => 'required|string',
                 'description' => 'required|string',
                 'content' => 'required|string'
@@ -150,7 +151,8 @@ class JelajahController extends Controller
         $berita = Article::findOrFail($decryptedId);
         $explode = explode('|', $berita['gallery']);
 
-        // print_r($explode);die();
+        // print_r($explode);
+        // die();
 
         return view('admin.jelajah.cmsEdit', compact('berita', 'explode'));
     }
@@ -164,6 +166,8 @@ class JelajahController extends Controller
      */
     public function update(Request $request, $id)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         // Decrypt article ID
         $decryptedId = decrypt($id);
 
@@ -171,7 +175,6 @@ class JelajahController extends Controller
         $berita = Article::findOrFail($decryptedId);
 
         $request->validate([
-            '_token' => 'required|string',
             'title' => 'required|string',
             'description' => 'required|string',
             'content' => 'required|string'
@@ -191,43 +194,46 @@ class JelajahController extends Controller
             $berita->photo = $fileName;
         }
 
-
-
-
-        if (empty($request->file())) {
-            $request->validate([
-                '_token' => 'required|string',
-                'title' => 'required|string',
-                'description' => 'required|string',
-                'content' => 'required|string'
-            ]);
+        if (empty($request->galeri[0]) && empty($request->file('gallery'))) {
+            $berita->gallery = null;
+            // print_r($berita->gallery);
+            // die();
         } else {
-            $request->validate([
-                '_token' => 'required|string',
-                'gallery' => 'required',
-                'title' => 'required|string',
-                'description' => 'required|string',
-                'content' => 'required|string'
-            ]);
+            if (empty($request->file())) {
+                $implode = implode("|", $request->galeri);
+                $berita->gallery = $implode;
+            } else {
+                $request->validate([
+                    'title' => 'required|string',
+                    'description' => 'required|string',
+                    'gallery' => 'max:6',
+                    'content' => 'required|string'
+                ]);
 
-            $gallery = array();
-            if ($files = $request->file('gallery')) {
-                foreach ($files as $file) {
-                    $info = $file->getClientOriginalName();
-                    $name = pathinfo($info, PATHINFO_FILENAME);
-                    $ext = pathinfo($info, PATHINFO_EXTENSION);
-                    $name = time() . rand() . '.' . $ext;
-                    $file->move(public_path() . '/images/article/jelajah/', $name);
-                    $gallery[] = $name;
+                $gallery = array();
+                if ($files = $request->file('gallery')) {
+                    foreach ($files as $file) {
+                        $info = $file->getClientOriginalName();
+                        $name = pathinfo($info, PATHINFO_FILENAME);
+                        $ext = pathinfo($info, PATHINFO_EXTENSION);
+                        $name = time() . rand() . '.' . $ext;
+                        $file->move(public_path() . '/images/article/jelajah/', $name);
+                        $gallery[] = $name;
+                    }
+                }
+                // print_r($gallery);
+                // echo "<br>";
+                // print_r($request->galeri[0]);
+                // die();
+                if (empty($request->galeri[0])) {
+                    $berita->gallery = implode("|", $gallery);
+                } else {
+                    $merge = array_merge($request->galeri, $gallery);
+                    $berita->gallery = implode("|", $merge);
                 }
             }
-
-
-            $berita->gallery = $berita->gallery . '|' . implode("|", $gallery);
-
-
-            // print_r($berita->gallery);die();
         }
+
 
 
         $berita->title = $request->title;

@@ -83,16 +83,22 @@
             @method("POST")
             <div class="uk-card uk-card-default uk-width-1-2@m card">
                 <div class="card-body">
-                    <h4>Name</h4>
+                    <h4>Name <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
-                            <input class="uk-input" type="text" placeholder="example: 'Bahasa Indonesia'" name="name">
+                            <input maxlength="50" id="textInput1" class="uk-input" type="text" placeholder="example: 'Bahasa Indonesia'" name="name">
+                        </div>
+                        <div class="uk-margin">
+                            <span id="charCountText1">0</span>/50 characters
                         </div>
                     </fieldset>
-                    <h4>Alias</h4>
+                    <h4>Alias <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
-                            <input class="uk-input" type="text" placeholder="example: 'indonesia'" name="alias">
+                            <input maxlength="50" id="textInput2" class="uk-input" type="text" placeholder="example: 'indonesia'" name="alias">
+                        </div>
+                        <div class="uk-margin">
+                            <span id="charCountText2">0</span>/50 characters
                         </div>
                     </fieldset>
                 </div>
@@ -103,7 +109,7 @@
         <div class="uk-card uk-card-default uk-width-1-2@m card">
             <div class="card-body">
                 <div class="col-12 px-0 mb-3">
-                    <h4>Kode</h4>
+                    <h4>Kode Bahasa <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <select class="uk-select" id="status">
@@ -142,6 +148,9 @@
                         </div>
                     </fieldset>
                 </div>
+                <div id="status-error" class="alert alert-danger d-none">
+                    * Mohon pilih kode bahasa.
+                </div>
                 <div class="col-12 px-0">
                     <button id="button-save" type="button" class="col-12 button primary icon-label">
                         <span class="inner-icon"><i class="icofont-save"></i></span>
@@ -158,6 +167,20 @@
 <script src="{{ asset('frontend/js/dropzone.min.js') }}"></script>
 <script src="{{ asset('backend/js/summernote.min.js') }}"></script>
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const titleInput = document.getElementById("textInput1");
+        const charCount = document.getElementById("charCountText1");
+        const textInput = document.getElementById("textInput2");
+        const charCountText = document.getElementById("charCountText2");
+
+        titleInput.addEventListener("input", function() {
+            charCount.textContent = titleInput.value.length;
+        });
+
+        textInput.addEventListener("input", function() {
+            charCountText.textContent = textInput.value.length;
+        });
+    });
     $(document).ready(function() {
         $.ajaxSetup({
             headers: {
@@ -185,7 +208,41 @@
         $(this).on('click', '#button-save', function(e) {
             e.preventDefault();
 
-            submitForm();
+            var isEmpty = false;
+            var isEmptyDropdown = false;
+            var selected = $('#status').val();
+
+            // Check if dropdown month is empty
+            if (selected === '') {
+                $('#status-error').removeClass('d-none'); // Show the error message
+                isEmptyDropdown = true; // Set isValid menjadi false jika dropdown month kosong
+            } else {
+                $('#status-error').addClass('d-none'); // Hide the error message
+            }
+
+            // Memeriksa setiap input dalam form
+            var inputs = $('#formBerita input[type="text"]');
+
+            inputs.each(function() {
+                // Memeriksa apakah input teks, nomor, atau email kosong
+                if ($(this).val() === '') {
+                    isEmpty = true;
+                    // Menampilkan pesan error di samping input yang kosong
+                    $(this).addClass('is-invalid');
+                    $(this).parent().append('<div style="font-size:17px;" class="invalid-feedback">* tidak boleh kosong.</div>');
+                } else {
+                    $(this).removeClass('is-invalid');
+                    $(this).parent().find('.invalid-feedback').remove();
+                }
+
+            });
+            // Jika ada input yang kosong, hentikan proses pengiriman formulir
+            if (isEmpty || isEmptyDropdown) {
+                return false;
+            } else {
+                // Jika semua input sudah diisi, kirim formulir
+                submitForm();
+            }
         });
 
 

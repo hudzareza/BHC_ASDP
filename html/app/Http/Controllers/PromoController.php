@@ -25,19 +25,23 @@ class PromoController extends Controller
      */
     public function index(): View
     {
+        $kode = app()->getLocale();
+
         $tiket = Ticket::where('approved', "1")->orderBy('id', 'desc')->get();
 
-        $promo = Promo::where('approved', "1")->orderBy('id', 'desc')->get();
+        $promo = Promo::where('approved', "1")->where('kode', '=', $kode)->orderBy('id', 'desc')->get();
 
         return view('promo.index', compact('tiket', 'promo'));
     }
 
     public function detail($id): View
     {
+        $kode = app()->getLocale();
+
         $data = DB::table('promos')
             ->where('id', '=', $id)->get();
 
-        $beritas = Promo::where('approved', '=', '1')->latest()->paginate(4);
+        $beritas = Promo::where('approved', '=', '1')->where('kode', '=', $kode)->latest()->paginate(4);
         return view('promo.detail', compact('beritas', 'data'));
     }
 
@@ -70,6 +74,8 @@ class PromoController extends Controller
      */
     public function store(Request $request)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         $request->validate([
             '_token' => 'required|string',
             'photo' => 'required',
@@ -93,6 +99,7 @@ class PromoController extends Controller
         $berita->title = $request->title;
         $berita->content = $request->content;
         $berita->photo = $fileName;
+        $berita->kode = $request->kode;
         $berita->approved = $request->status;
         $berita->created_at = date("Y-m-d H:i:s");
         // $berita->is_front = $request->is_front;
@@ -143,6 +150,8 @@ class PromoController extends Controller
      */
     public function update(Request $request, $id)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         // Decrypt article ID
         $decryptedId = decrypt($id);
 
@@ -171,6 +180,8 @@ class PromoController extends Controller
 
         $berita->title = $request->title;
         $berita->content = $request->content;
+        $berita->kode = $request->kode;
+
         $berita->approved = $request->status;
         $berita->updated_at = date("Y-m-d H:i:s");
         // $berita->created_by = Auth::user()->id;
@@ -249,6 +260,7 @@ class PromoController extends Controller
 
     public function storeslider(Request $request)
     {
+        date_default_timezone_set('Asia/Jakarta');
 
         $berita = new Sliderpromo;
         $berita->id_promo = $request->id;

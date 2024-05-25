@@ -15,6 +15,7 @@ use App\Models\Info_lang;
 use App\Models\Contact_lang;
 use App\Models\Tickets_lang;
 use App\Models\Promo_lang;
+use App\Models\Profile_lang;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
@@ -43,6 +44,8 @@ class LanguageController extends Controller
      */
     public function store(Request $request)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         $request->validate([
             'name' => 'required|string',
             'alias' => 'required|string',
@@ -99,6 +102,8 @@ class LanguageController extends Controller
      */
     public function update(Request $request, $id)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         // Decrypt article ID
         $decryptedId = decrypt($id);
 
@@ -131,6 +136,17 @@ class LanguageController extends Controller
      */
     public function destroy($id)
     {
+        // Decrypt article ID
+        $decryptedId = decrypt($id);
+
+        // Find article Data
+        $berita = Language::findOrFail($decryptedId);
+
+        if ($berita->delete()) {
+            return redirect()->route('admin.list.lang')->withSuccess('Succesfully deleted');
+        } else {
+            return back()->withSuccess('Failed deleted');
+        }
     }
 
     public function listLayout($id)
@@ -157,6 +173,8 @@ class LanguageController extends Controller
 
     public function navbarUpsert(Request $request, $id)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         // Decrypt article ID
         $decryptedId = decrypt($id);
 
@@ -215,6 +233,8 @@ class LanguageController extends Controller
 
     public function footerUpsert(Request $request, $id)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         // Decrypt article ID
         $decryptedId = decrypt($id);
 
@@ -270,6 +290,8 @@ class LanguageController extends Controller
 
     public function loginUpsert(Request $request, $id)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         // Decrypt article ID
         $decryptedId = decrypt($id);
 
@@ -329,6 +351,8 @@ class LanguageController extends Controller
 
     public function homeUpsert(Request $request, $id)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         // Decrypt article ID
         $decryptedId = decrypt($id);
 
@@ -384,6 +408,8 @@ class LanguageController extends Controller
 
     public function eventUpsert(Request $request, $id)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         // Decrypt article ID
         $decryptedId = decrypt($id);
 
@@ -458,6 +484,8 @@ class LanguageController extends Controller
 
     public function jelajahUpsert(Request $request, $id)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         // Decrypt article ID
         $decryptedId = decrypt($id);
 
@@ -501,6 +529,8 @@ class LanguageController extends Controller
 
     public function infoUpsert(Request $request, $id)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         // Decrypt article ID
         $decryptedId = decrypt($id);
 
@@ -550,6 +580,8 @@ class LanguageController extends Controller
 
     public function contactUpsert(Request $request, $id)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         // Decrypt article ID
         $decryptedId = decrypt($id);
 
@@ -609,6 +641,8 @@ class LanguageController extends Controller
 
     public function ticketUpsert(Request $request, $id)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         // Decrypt article ID
         $decryptedId = decrypt($id);
 
@@ -656,6 +690,8 @@ class LanguageController extends Controller
 
     public function promoUpsert(Request $request, $id)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         // Decrypt article ID
         $decryptedId = decrypt($id);
 
@@ -684,6 +720,70 @@ class LanguageController extends Controller
 
         if ($upsert) {
             return redirect()->route('admin.layout.lang', $id)->withSuccess('Succesfully updated Promo Layout');
+        } else {
+            return back()->withSuccess('Failed updated');
+        }
+    }
+
+    public function profile($id)
+    {
+        $decryptedId = decrypt($id);
+
+        $berita = Language::findOrFail($decryptedId);
+        $profile = Profile_lang::where('id_bahasa', '=', $decryptedId)->first();
+
+        $code = $berita->kode;
+
+        return view('admin.language.profile', compact('code', 'id', 'profile'));
+    }
+
+    public function profileUpsert(Request $request, $id)
+    {
+        date_default_timezone_set('Asia/Jakarta');
+
+        // Decrypt article ID
+        $decryptedId = decrypt($id);
+
+        $request->validate([
+            'kode' => 'required|string',
+            'header' => 'required|string',
+            'informasi' => 'required|string',
+            'nama' => 'required|string',
+            'telepon' => 'required|string',
+            'informasi_akun' => 'required|string',
+            'ganti_password' => 'required|string',
+            'password_lama' => 'required|string',
+            'password_baru' => 'required|string',
+            'konfirmasi' => 'required|string',
+            'btn' => 'required|string'
+        ]);
+
+
+        $data = [
+            'id_bahasa' => $decryptedId,
+            'kode' => $request->kode,
+            'header' => $request->header,
+            'informasi' => $request->informasi,
+            'nama' => $request->nama,
+            'telepon' => $request->telepon,
+            'informasi_akun' => $request->informasi_akun,
+            'ganti_password' => $request->ganti_password,
+            'password_lama' => $request->password_lama,
+            'password_baru' => $request->password_baru,
+            'konfirmasi' => $request->konfirmasi,
+            'btn' => $request->btn,
+            'edit_date' => date("Y-m-d H:i:s"),
+        ];
+
+        $condition = [
+            'id_bahasa' => $decryptedId,
+            'kode' => $request->kode,
+        ];
+
+        $upsert = Profile_lang::updateOrInsert($condition, $data);
+
+        if ($upsert) {
+            return redirect()->route('admin.layout.lang', $id)->withSuccess('Succesfully updated Profile Layout');
         } else {
             return back()->withSuccess('Failed updated');
         }

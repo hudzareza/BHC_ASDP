@@ -7,13 +7,13 @@
 @endsection
 
 @section('custom-css')
-    
+
 @endsection
 
 @section('content-title')
 <div class="row mb-2">
     <div class="col-8 d-flex align-items-center">
-    Master Banner
+        Master Banner
     </div>
     <div class="col-4">
         <div class="input-group">
@@ -28,13 +28,12 @@
 <div class="row merged20 mb-4">
     <div class="col-lg-12">
         <div class="d-widget">
-            <table class="table table-default all-events table-striped table-responsive-lg">
+            <table id="myTableContact">
                 <thead>
                     <tr>
                         <th>#</th>
                         <th>Image</th>
                         <th>Category</th>
-                        <!-- <th>Caption</th> -->
                         <th>Activity Information</th>
                         <th>Action</th>
                     </tr>
@@ -49,9 +48,6 @@
                             </div>
                         </td>
                         <td>{{$berita->category}}</td>
-                        <!-- <td>
-                            {{$berita->caption}}
-                        </td> -->
                         <td>
                             <ul>
                                 <!-- <li>Created by : {{$berita->created_by}}</li> -->
@@ -83,17 +79,17 @@
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-                Access-Control-Allow-Origin: *
+                Access - Control - Allow - Origin: *
             }
         });
         $(this).on('change', 'input[name="status"]', function(e) {
             var id = $(this).attr('data-id');
             var dataStatus = '1';
-            if($(this).prop("checked") == false){
+            if ($(this).prop("checked") == false) {
                 dataStatus = '0';
             }
             $.ajax({
-                url: '{{ url("admin/status-galeri/")}}'+'/'+id,
+                url: '{{ url("admin/status-galeri/")}}' + '/' + id,
                 type: 'POST',
                 data: {
                     status: dataStatus
@@ -103,7 +99,7 @@
                 }
             });
         });
-        
+
     });
 </script>
 @endsection

@@ -91,55 +91,55 @@
             @method("POST")
             <div class="uk-card uk-card-default uk-width-1-2@m card">
                 <div class="card-body">
-                    <h4>Div "Header Login"</h4>
+                    <h4>Div "Header Login" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" value="{{$login->header_login ?? ''}}" type="text" placeholder="" name="header_login">
                         </div>
                     </fieldset>
-                    <h4>Div "Header Register"</h4>
+                    <h4>Div "Header Register" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" value="{{$login->header_register ?? ''}}" type="text" placeholder="" name="header_register">
                         </div>
                     </fieldset>
-                    <h4>Div "Kolom Email"</h4>
+                    <h4>Div "Kolom Email" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" value="{{$login->email ?? ''}}" type="text" placeholder="" name="email">
                         </div>
                     </fieldset>
-                    <h4>Div "Kolom Username"</h4>
+                    <h4>Div "Kolom Username" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" value="{{$login->username ?? ''}}" type="text" placeholder="" name="username">
                         </div>
                     </fieldset>
-                    <h4>Div "Kolom Password"</h4>
+                    <h4>Div "Kolom Password" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" type="text" value="{{$login->password ?? ''}}" placeholder="" name="password">
                         </div>
                     </fieldset>
-                    <h4>Div "Tombol Login"</h4>
+                    <h4>Div "Tombol Login" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" type="text" value="{{$login->submit_login ?? ''}}" placeholder="" name="submit_login">
                         </div>
                     </fieldset>
-                    <h4>Div "Tombol Register"</h4>
+                    <h4>Div "Tombol Register" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" type="text" value="{{$login->submit_register ?? ''}}" placeholder="" name="submit_register">
                         </div>
                     </fieldset>
-                    <h4>Div "Info Daftar"</h4>
+                    <h4>Div "Info Daftar" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" type="text" value="{{$login->keterangan_masuk ?? ''}}" placeholder="" name="keterangan_masuk">
                         </div>
                     </fieldset>
-                    <h4>Div "Info Login"</h4>
+                    <h4>Div "Info Login" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" type="text" value="{{$login->keterangan_daftar ?? ''}}" placeholder="" name="keterangan_daftar">
@@ -196,7 +196,29 @@
         $(this).on('click', '#button-save', function(e) {
             e.preventDefault();
 
-            submitForm();
+            // Memeriksa setiap input dalam form
+            var inputs = $('#formBerita input[type="text"]');
+            var isEmpty = false;
+
+            inputs.each(function() {
+                if ($(this).val() === '') {
+                    isEmpty = true;
+                    // Menampilkan pesan error di samping input yang kosong
+                    $(this).addClass('is-invalid');
+                    $(this).parent().append('<div style="font-size:17px;" class="invalid-feedback">* tidak boleh kosong.</div>');
+                } else {
+                    $(this).removeClass('is-invalid');
+                    $(this).parent().find('.invalid-feedback').remove();
+                }
+            });
+
+            // Jika ada input yang kosong, hentikan proses pengiriman formulir
+            if (isEmpty) {
+                return false;
+            } else {
+                // Jika semua input sudah diisi, kirim formulir
+                submitForm();
+            }
         });
 
 

@@ -7,13 +7,13 @@
 @endsection
 
 @section('custom-css')
-    
+
 @endsection
 
 @section('content-title')
 <div class="row mb-2">
     <div class="col-8 d-flex align-items-center">
-    Role
+        Role
     </div>
     <div class="col-4">
         <div class="input-group">
@@ -28,7 +28,7 @@
 <div class="row merged20 mb-4">
     <div class="col-lg-12">
         <div class="d-widget">
-            <table class="table table-default all-events table-striped table-responsive-lg">
+            <table id="myTableRole">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -42,7 +42,7 @@
                     <tr>
                         <td>{{++$loop->index}}</td>
                         <td>
-                            {{strip_tags($berita->name)}}  
+                            {{strip_tags($berita->name)}}
                         </td>
                         <td>
                             {{strip_tags($berita->desc)}}
@@ -64,48 +64,5 @@
 @endsection
 
 @section('custom-js')
-<script>
-    $(document).ready(function() {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-                Access-Control-Allow-Origin: *
-            }
-        });
-        $(this).on('change', 'input[name="status"]', function(e) {
-            var id = $(this).attr('data-id');
-            var dataStatus = '1';
-            if($(this).prop("checked") == false){
-                dataStatus = '0';
-            }
-            $.ajax({
-                url: '{{ url("admin/status-info/")}}'+'/'+id,
-                type: 'POST',
-                data: {
-                    status: dataStatus
-                },
-                success: function(resp) {
-                    alert(resp.data);
-                }
-            });
-        });
-        // $(this).on('change', 'input[name="front"]', function(e) {
-        //     var id = $(this).attr('data-id');
-        //     var dataFront = 'ya';
-        //     if($(this).prop("checked") == false){
-        //         dataFront = 'tidak';
-        //     }
-        //     $.ajax({
-        //         url: '/admin/berita-inovasi/changeFront/'+id,
-        //         type: 'POST',
-        //         data: {
-        //             status: dataFront
-        //         },
-        //         success: function(resp) {
-        //             alert(resp.data);
-        //         }
-        //     });
-        // });
-    });
-</script>
+
 @endsection

@@ -8,10 +8,10 @@
 				<form action="{{ route('authenticate') }}" method="post">
 					@csrf
 					<div class="mb-4">
-						<input type="email" class="form-control @error('email') is-invalid @enderror notranslate" id="email" name="email" value="{{ old('email') }}" placeholder="{{__('login.email')}}">
+						<input type="email" class="form-control @error('email') is-invalid @enderror notranslate" name="email" value="{{ old('email') }}" placeholder="{{__('login.email')}}">
 					</div>
 					<div class="mb-4">
-						<input type="password" class="form-control @error('password') is-invalid @enderror notranslate" id="email" name="password" placeholder="{{__('login.password')}}">
+						<input type="password" class="form-control @error('password') is-invalid @enderror notranslate" name="password" placeholder="{{__('login.password')}}">
 					</div>
 					<div class="mb-4">
 						<button class="btn btn-success w-100 notranslate" type="submit">{{__('login.submit_login')}}</button>
@@ -32,30 +32,24 @@
 			<div class="modal-body">
 				<h1 class="modal-title fs-5 mb-3 text-center" id="staticBackdropLabel">{{__('login.header_register')}}</h1>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				<form action="{{ route('store') }}" method="post">
+				<form id="form" action="{{ route('store') }}" method="post">
 					@csrf
 					<div class="mb-4">
-						<input type="text" class="form-control @error('name') is-invalid @enderror notranslate" id="email" name="name" value="{{ old('name') }}" placeholder="{{__('login.username')}}">
-						@if ($errors->has('name'))
-						<span class="text-danger">{{ $errors->first('name') }}</span>
-						@endif
+						<input type="text" class="form-control" name="name" value="{{ old('name') }}" placeholder="{{__('login.username')}}">
+
 					</div>
 					<div class="mb-4">
-						<input type="email" class="form-control @error('email') is-invalid @enderror notranslate" id="email" name="email" value="{{ old('email') }}" placeholder="{{__('login.email')}}">
-						@if ($errors->has('email'))
-						<span class="text-danger notranslate">{{ $errors->first('email') }}</span>
-						@endif
+						<input type="email" class="form-control" id="surel" name="email" placeholder="{{__('login.email')}}">
+
 					</div>
 					<div class="mb-4">
-						<input type="password" class="form-control @error('password') is-invalid @enderror notranslate" id="name" name="password" placeholder="{{__('login.password')}}">
-						@if ($errors->has('password'))
-						<span class="text-danger">{{ $errors->first('password') }}</span>
-						@endif
-					</div>
-					<div class="mb-4">
-						<button class="btn btn-success w-100" type="submit">{{__('login.submit_register')}}</button>
+						<input type="password" class="form-control" name="password" placeholder="{{__('login.password')}}">
+
 					</div>
 				</form>
+				<div class="mb-4">
+					<button class="btn btn-success w-100" type="submit" type="submit" id="submitBtn">{{__('login.submit_register')}}</button>
+				</div>
 				<p class="text-center">
 					{{__('login.keterangan_daftar')}} <a role="button" class="akunlink notranslate" data-bs-toggle="modal" data-bs-target="#modallogin"> {{__('login.header_login')}}</a>
 				</p>
@@ -63,3 +57,105 @@
 		</div>
 	</div>
 </div>
+
+<script>
+	$(document).ready(function() {
+		$(this).on('click', '#submitBtn', function(e) {
+			e.preventDefault();
+
+			var isEmptyName = false;
+			var isEmptyEmail = false;
+			var isEmptyPassword = false;
+
+			var inputs1 = $('#form input[name="name"]');
+
+			inputs1.each(function() {
+				// Memeriksa apakah input teks, nomor, atau email kosong
+				if ($(this).val() === '') {
+					isEmptyName = true;
+					// Menampilkan pesan error di samping input yang kosong
+					$(this).addClass('is-invalid');
+					$(this).parent().append('<div style="font-size:17px;" class="invalid-feedback">This field cannot be empty.</div>');
+				} else {
+					$(this).removeClass('is-invalid');
+					$(this).parent().find('.invalid-feedback').remove();
+				}
+
+			});
+
+			// Memeriksa setiap input dalam form
+			var inputs2 = $('#form input[name="email"]');
+
+			inputs2.each(function() {
+				// Memeriksa apakah input teks, nomor, atau email kosong
+				if ($(this).val() === '') {
+					isEmptyEmail = true;
+					// Menampilkan pesan error di samping input yang kosong
+					$(this).addClass('is-invalid');
+					$(this).parent().append('<div style="font-size:17px;" class="invalid-feedback">This field cannot be empty.</div>');
+				} else {
+					$(this).removeClass('is-invalid');
+					$(this).parent().find('.invalid-feedback').remove();
+				}
+
+			});
+
+			// Memeriksa setiap input dalam form
+			var inputs3 = $('#form input[name="password"]');
+
+			inputs3.each(function() {
+				// Memeriksa apakah input teks, nomor, atau email kosong
+				if ($(this).val() === '') {
+					isEmptyPassword = true;
+					// Menampilkan pesan error di samping input yang kosong
+					$(this).addClass('is-invalid');
+					$(this).parent().append('<div style="font-size:17px;" class="invalid-feedback">This field cannot be empty.</div>');
+				} else {
+					$(this).removeClass('is-invalid');
+					$(this).parent().find('.invalid-feedback').remove();
+				}
+
+			});
+
+			// Jika ada input yang kosong, hentikan proses pengiriman formulir
+			if (isEmptyName === true || isEmptyEmail === true || isEmptyPassword === true) {
+				return false;
+			} else {
+				// Jika semua input sudah diisi, kirim formulir
+				submitForm();
+			}
+		});
+
+		$('#surel').on('keyup', function() {
+			var email = $(this).val();
+
+			$.ajax({
+				url: "{{ route('cek-email') }}",
+				method: 'POST',
+				data: {
+					email: email,
+					_token: '{{ csrf_token() }}'
+				},
+				success: function(response) {
+					// console.log(response);
+					if (response.exists) {
+						// Jika email sudah ada, tampilkan pesan kesalahan
+						$('#surel').addClass('is-invalid');
+						$('#surel').parent().find('.invalid-feedback').remove();
+						$('#surel').parent().append('<div class="invalid-feedback">Email has been registered.</div>');
+						$('#submitBtn').attr('disabled', true);
+					} else {
+						// Jika email belum ada, hapus pesan kesalahan (jika ada)
+						$('#surel').removeClass('is-invalid');
+						$('#surel').parent().find('.invalid-feedback').remove();
+						$('#submitBtn').removeAttr('disabled');
+					}
+				}
+			});
+		});
+	});
+
+	async function submitForm() {
+		$('#form').submit();
+	}
+</script>

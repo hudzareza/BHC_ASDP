@@ -15,9 +15,17 @@ class Localization
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (session()->has('locale')) {
-            app()->setLocale(session()->get('locale'));
+        // Memeriksa apakah status bahasa tersimpan dalam sesi
+        if ($request->session()->has('locale')) {
+            // Memulihkan status bahasa dari sesi
+            $locale = $request->session()->get('locale');
+        } else {
+            // Jika tidak ada status bahasa yang tersimpan, gunakan bahasa default
+            $locale = config('app.locale');
         }
+
+        // Atur bahasa aplikasi sesuai dengan nilai yang disimpan
+        app()->setLocale($locale);
         return $next($request);
     }
 }

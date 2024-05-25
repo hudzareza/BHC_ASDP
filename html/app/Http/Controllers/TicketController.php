@@ -22,7 +22,7 @@ class TicketController extends Controller
     {
         return view('ticket.index');
     }
-    
+
     public function soon(): View
     {
         return view('ticket.soon');
@@ -44,25 +44,27 @@ class TicketController extends Controller
 
     public function store(Request $request)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         $request->validate([
             '_token' => 'required|string',
             'photo' => 'required',
             'name' => 'required|string',
             'url' => 'required|string'
         ]);
-        
+
         $image_parts = explode(";base64,", $request->photo);
         $image_type_aux = explode("image/", $image_parts[0]);
-        
+
         $image_type = $image_type_aux[1];
         $extension = $image_type;
-        $fileName = time() . rand() .'.' . $extension;
+        $fileName = time() . rand() . '.' . $extension;
 
-        Image::make($request->photo)->resize(60, 60)->save(public_path() .'/images/article/ticket/'. $fileName);
+        Image::make($request->photo)->resize(60, 60)->save(public_path() . '/images/article/' . $fileName);
 
         // $fileName = time() . '.' . $request->photo->extension();
         // $request->photo->move(public_path() .'/images/article/', $fileName);
-        
+
         $berita = new Ticket;
         $berita->name = $request->name;
         $berita->url = $request->url;
@@ -91,35 +93,37 @@ class TicketController extends Controller
 
     public function update(Request $request, $id)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         // Decrypt article ID
         $decryptedId = decrypt($id);
 
         // Find article Data
         $berita = Ticket::findOrFail($decryptedId);
 
-            
+
         $request->validate([
             '_token' => 'required|string',
             'name' => 'required|string',
             'url' => 'required|string'
         ]);
-        
+
 
         if (empty($request->photo)) {
             $berita->photo = $request->exist;
-        }else {
+        } else {
             $image_parts = explode(";base64,", $request->photo);
             $image_type_aux = explode("image/", $image_parts[0]);
-            
+
             $image_type = $image_type_aux[1];
             $extension = $image_type;
-            $fileName = time() . rand() .'.' . $extension;
-            Image::make($request->photo)->resize(60, 60)->save(public_path() .'/images/article/ticket/'. $fileName);    
-            
+            $fileName = time() . rand() . '.' . $extension;
+            Image::make($request->photo)->resize(60, 60)->save(public_path() . '/images/article/' . $fileName);
+
             $berita->photo = $fileName;
         }
-        
-        
+
+
         $berita->name = $request->name;
         $berita->url = $request->url;
         $berita->approved = $request->status;
@@ -154,13 +158,13 @@ class TicketController extends Controller
         }
     }
 
-    
+
     public function changeStatus(Request $request, $id, $params)
     {
         // print_r($params);die();
-    
+
         $decryptedId = decrypt($id);
-        
+
         $berita = Ticket::find($decryptedId);
         $berita->approved = $params;
 

@@ -28,15 +28,15 @@
 <div class="row merged20 mb-4">
     <div class="col-lg-12">
         <div class="d-widget">
-            <table id="myTable">
+            <table id="myTableJelajah">
                 <thead>
                     <tr>
                         <th>#</th>
                         <th>Photo</th>
                         <th>Language</th>
                         <th>Title</th>
-                        <!-- <th>Activity Information</th> -->
                         <th>Status</th>
+                        <th>Activity Information</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -53,14 +53,6 @@
                         <td>
                             {{$berita->title}}
                         </td>
-                        <!-- <td>
-                            <ul>
-                               
-                                <li>Created at : {{$berita->created_at}}</li>
-                                <li>Edited at : {{$berita->updated_at}}</li>
-                               
-                            </ul>
-                        </td> -->
                         <td>
                             @if($berita->approved =='1')
                             <span class="badge bg-warning">Publish</span>
@@ -68,6 +60,14 @@
                             <span class="badge bg-light">Draft</span>
                             @endif
 
+                        </td>
+                        <td>
+                            <ul>
+
+                                <li>Created at : {{$berita->created_at}}</li>
+                                <li>Edited at : {{$berita->updated_at}}</li>
+
+                            </ul>
                         </td>
                         <td>
                             @if($berita->approved =='1')

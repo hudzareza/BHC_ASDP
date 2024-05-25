@@ -34,16 +34,18 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         $request->validate([
             '_token' => 'required|string',
             'name' => 'required|string',
             'desc' => 'required|string'
         ]);
-        
+
         $berita = new Role;
         $berita->name = $request->name;
         $berita->desc = $request->desc;
-        
+
         $berita->created_at = date("Y-m-d H:i:s");
         // $berita->created_by = Auth::user()->id;
 
@@ -92,18 +94,20 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         // Decrypt article ID
         $decryptedId = decrypt($id);
 
         // Find article Data
         $berita = Role::findOrFail($decryptedId);
-        
+
         $request->validate([
             '_token' => 'required|string',
             'name' => 'required|string',
             'desc' => 'required|string'
         ]);
-        
+
         $berita->name = $request->name;
         $berita->desc = $request->desc;
         $berita->updated_at = date("Y-m-d H:i:s");

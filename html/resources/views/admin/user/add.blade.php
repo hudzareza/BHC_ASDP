@@ -83,25 +83,25 @@
             @method("POST")
             <div class="uk-card uk-card-default uk-width-1-2@m card">
                 <div class="card-body">
-                    <h4>Name</h4>
+                    <h4>Name <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" type="text" placeholder="Nama" name="name">
                         </div>
                     </fieldset>
-                    <h4>Email</h4>
+                    <h4>Email <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
-                            <input class="uk-input" type="text" placeholder="Email" name="email">
+                            <input class="uk-input" type="text" placeholder="Email" name="email" id="email">
                         </div>
                     </fieldset>
-                    <h4>Phone Number</h4>
+                    <h4>Phone Number <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" type="text" placeholder="Nomor Telepon" name="phone_number">
                         </div>
                     </fieldset>
-                    <h4>Password</h4>
+                    <h4>Password <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" type="password" placeholder="Password" name="password">
@@ -122,7 +122,7 @@
                                 <?php
                                 foreach ($role as $key => $roles) {
                                 ?>
-                                <option value="{{$roles['name']}}">{{$roles['name']}}</option>
+                                    <option value="{{$roles['name']}}">{{$roles['name']}}</option>
                                 <?php
                                 }
                                 ?>
@@ -164,7 +164,7 @@
             }
         });
 
-        
+
 
         $('#description').summernote({
             toolbar: [
@@ -182,16 +182,123 @@
         $(this).on('click', '#button-save', function(e) {
             e.preventDefault();
 
-            submitForm();
+            var isEmptyName = false;
+            var isEmptyEmail = false;
+            var isEmptyPassword = false;
+            var isEmptyTelephone = false;
+
+            // Memeriksa setiap input dalam form
+            var inputs1 = $('#formBerita input[name="name"]');
+
+            inputs1.each(function() {
+                // Memeriksa apakah input teks, nomor, atau email kosong
+                if ($(this).val() === '') {
+                    isEmptyName = true;
+                    // Menampilkan pesan error di samping input yang kosong
+                    $(this).addClass('is-invalid');
+                    $(this).parent().append('<div style="font-size:17px;" class="invalid-feedback">* tidak boleh kosong.</div>');
+                } else {
+                    $(this).removeClass('is-invalid');
+                    $(this).parent().find('.invalid-feedback').remove();
+                }
+
+            });
+
+            // Memeriksa setiap input dalam form
+            var inputs2 = $('#formBerita input[name="email"]');
+
+            inputs2.each(function() {
+                // Memeriksa apakah input teks, nomor, atau email kosong
+                if ($(this).val() === '') {
+                    isEmptyEmail = true;
+                    // Menampilkan pesan error di samping input yang kosong
+                    $(this).addClass('is-invalid');
+                    $(this).parent().append('<div style="font-size:17px;" class="invalid-feedback">* tidak boleh kosong.</div>');
+                } else {
+                    $(this).removeClass('is-invalid');
+                    $(this).parent().find('.invalid-feedback').remove();
+                }
+
+            });
+
+            // Memeriksa setiap input dalam form
+            var inputs3 = $('#formBerita input[name="password"]');
+
+            inputs3.each(function() {
+                // Memeriksa apakah input teks, nomor, atau email kosong
+                if ($(this).val() === '') {
+                    isEmptyPassword = true;
+                    // Menampilkan pesan error di samping input yang kosong
+                    $(this).addClass('is-invalid');
+                    $(this).parent().append('<div style="font-size:17px;" class="invalid-feedback">* tidak boleh kosong.</div>');
+                } else {
+                    $(this).removeClass('is-invalid');
+                    $(this).parent().find('.invalid-feedback').remove();
+                }
+
+            });
+
+            // Memeriksa setiap input dalam form
+            var inputs4 = $('#formBerita input[name="phone_number"]');
+
+            inputs4.each(function() {
+                // Memeriksa apakah input teks, nomor, atau email kosong
+                if ($(this).val() === '') {
+                    isEmptyTelephone = true;
+                    // Menampilkan pesan error di samping input yang kosong
+                    $(this).addClass('is-invalid');
+                    $(this).parent().append('<div style="font-size:17px;" class="invalid-feedback">* tidak boleh kosong.</div>');
+                } else {
+                    $(this).removeClass('is-invalid');
+                    $(this).parent().find('.invalid-feedback').remove();
+                }
+
+            });
+
+
+            // Jika ada input yang kosong, hentikan proses pengiriman formulir
+            if (isEmptyName === true || isEmptyEmail === true || isEmptyPassword === true || isEmptyTelephone === true) {
+                return false;
+            } else {
+                // Jika semua input sudah diisi, kirim formulir
+                submitForm();
+            }
         });
 
-        
+
+
+        $('#email').on('keyup', function() {
+            var email = $(this).val();
+
+            $.ajax({
+                url: "{{ route('check-email') }}",
+                method: 'POST',
+                data: {
+                    email: email,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (response.exists) {
+                        // Jika email sudah ada, tampilkan pesan kesalahan
+                        $('#email').addClass('is-invalid');
+                        $('#email').parent().find('.invalid-feedback').remove();
+                        $('#email').parent().append('<div class="invalid-feedback">Email sudah terdaftar.</div>');
+                    } else {
+                        // Jika email belum ada, hapus pesan kesalahan (jika ada)
+                        $('#email').removeClass('is-invalid');
+                        $('#email').parent().find('.invalid-feedback').remove();
+                    }
+                }
+            });
+        });
+
+
     });
 
     async function addDataForm() {
         var valueStatus = $('#status').val();
         // var valueFront = $('#front').val();
-        $('#formBerita').append('<input type="hidden" name="role" value="'+valueStatus+'" /> ');
+        $('#formBerita').append('<input type="hidden" name="role" value="' + valueStatus + '" /> ');
         // $('#formBerita').append('<input type="hidden" name="is_front" value="'+valueFront+'" /> ');
         return;
     }

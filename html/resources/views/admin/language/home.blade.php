@@ -92,43 +92,43 @@
             @method("POST")
             <div class="uk-card uk-card-default uk-width-1-2@m card">
                 <div class="card-body">
-                    <h4>Div "Beli Tiket Sekarang"</h4>
+                    <h4>Div "Beli Tiket Sekarang" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" value="{{$home->beli_tiket ?? ''}}" type="text" placeholder="" name="beli_tiket">
                         </div>
                     </fieldset>
-                    <h4>Div "Tombol Beli Tiket"</h4>
+                    <h4>Div "Tombol Beli Tiket" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" value="{{$home->btn_beli_tiket ?? ''}}" type="text" placeholder="" name="btn_beli_tiket">
                         </div>
                     </fieldset>
-                    <h4>Div "Selamat Datang di"</h4>
+                    <h4>Div "Selamat Datang di" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" value="{{$home->welcome ?? ''}}" type="text" placeholder="" name="welcome">
                         </div>
                     </fieldset>
-                    <h4>Div "Tombol Eksplorasi"</h4>
+                    <h4>Div "Tombol Eksplorasi" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" value="{{$home->btn_jelajah ?? ''}}" type="text" placeholder="" name="btn_jelajah">
                         </div>
                     </fieldset>
-                    <h4>Div "Info BHC"</h4>
+                    <h4>Div "Info BHC" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" type="text" value="{{$home->info_bhc ?? ''}}" placeholder="" name="info_bhc">
                         </div>
                     </fieldset>
-                    <h4>Div "Informasi Terbaru & Artikel BHC"</h4>
+                    <h4>Div "Informasi Terbaru & Artikel BHC" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" type="text" value="{{$home->info_bhc_desc ?? ''}}" placeholder="" name="info_bhc_desc">
                         </div>
                     </fieldset>
-                    <h4>Div "Tombol Lihat Semua"</h4>
+                    <h4>Div "Tombol Lihat Semua" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" type="text" value="{{$home->btn_lihat_info ?? ''}}" placeholder="" name="btn_lihat_info">
@@ -185,7 +185,29 @@
         $(this).on('click', '#button-save', function(e) {
             e.preventDefault();
 
-            submitForm();
+            // Memeriksa setiap input dalam form
+            var inputs = $('#formBerita input[type="text"]');
+            var isEmpty = false;
+
+            inputs.each(function() {
+                if ($(this).val() === '') {
+                    isEmpty = true;
+                    // Menampilkan pesan error di samping input yang kosong
+                    $(this).addClass('is-invalid');
+                    $(this).parent().append('<div style="font-size:17px;" class="invalid-feedback">* tidak boleh kosong.</div>');
+                } else {
+                    $(this).removeClass('is-invalid');
+                    $(this).parent().find('.invalid-feedback').remove();
+                }
+            });
+
+            // Jika ada input yang kosong, hentikan proses pengiriman formulir
+            if (isEmpty) {
+                return false;
+            } else {
+                // Jika semua input sudah diisi, kirim formulir
+                submitForm();
+            }
         });
 
 

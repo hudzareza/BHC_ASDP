@@ -26,7 +26,7 @@ class DashboardController extends Controller
 
     public function report()
     {
-        date_default_timezone_set('UTC');
+        date_default_timezone_set('Asia/Jakarta');
         // count user 
         $user = User::all()->sortByDesc('id');
         $user = json_decode(json_encode($user), true);
@@ -37,22 +37,19 @@ class DashboardController extends Controller
         if (!empty($_GET['startdate'])) {
             $start_date = $_GET['startdate'];
             $end_date = $_GET['enddate'];
+            $result = Goers::whereBetween('schedule_date', [$start_date, $end_date])->get();
         } else {
-            // $start_date = date('Y-m-d');
-            // $end_date = date('Y-m-d');
-            $start_date = '2023-11-20';
-            $end_date = '2023-11-30';
+            $result = Goers::all()->sortByDesc('id');
         }
 
-        $result = Goers::whereBetween('schedule_date', [$start_date, $end_date])->get();
 
         return view('admin.dashboard.report', compact('result', 'userCount'));
     }
 
     public function csv()
     {
-        date_default_timezone_set('UTC');
-        $fileName = 'goers-report.csv';
+        date_default_timezone_set('Asia/Jakarta');
+        $fileName = 'goers-report';
         $headers = array(
             "Content-type"        => "application/vnd.ms-excel",
             "Content-Disposition" => "attachment; filename=$fileName",
@@ -66,38 +63,35 @@ class DashboardController extends Controller
         if (!empty($_GET['date'])) {
             $start_date = $_GET['date'];
             $end_date = $_GET['date'];
-            // print_r($_GET);die();
+            $result = Goers::whereBetween('schedule_date', [$start_date, $end_date])->get();
         } else {
-            // $start_date = date('Y-m-d');
-            // $end_date = date('Y-m-d');
-            $start_date = '2023-11-20';
-            $end_date = '2023-11-30';
+            $result = Goers::all()->sortByDesc('id');
         }
 
-        $result = Goers::whereBetween('schedule_date', [$start_date, $end_date])->get();
 
         $tasks = json_decode(json_encode($result), true);
 
         $callback = function () use ($tasks, $columns) {
             $file = fopen('php://output', 'w');
+            fprintf($file, "\xEF\xBB\xBF");
             fputcsv($file, $columns);
 
             foreach ($tasks as $task) {
-                $row['Order Number']  = $task['order_number'];
-                $row['Item Content']    = $task['item_content'];
-                $row['Item Group']    = $task['item_group'];
-                $row['Item Name']  = $task['item_name'];
-                $row['Item Total']  = $task['item_total'];
-                $row['Item Price']  = $task['item_price'];
-                $row['Item Total Price']  = $task['item_total_price'];
-                $row['Item Total Tax']  = $task['item_total_tax'];
-                $row['Item Total Price Before Tax']  = $task['item_total_price_before_tax'];
-                $row['Order By']  = $task['order_by'];
-                $row['Status']  = $task['status'];
-                $row['Schedule Date']  = $task['schedule_date'];
-                $row['Schedule Datetime']  = $task['schedule_datetime'];
-                $row['Created At']  = $task['created_at'];
-                $row['Payment Method']  = $task['payment_method'];
+                $row['Order Number']  = cleanValue($task['order_number']);
+                $row['Item Content']    = cleanValue($task['item_content']);
+                $row['Item Group']    = cleanValue($task['item_group']);
+                $row['Item Name']  = cleanValue($task['item_name']);
+                $row['Item Total']  = strval($task['item_total']);
+                $row['Item Price']  = strval($task['item_price']);
+                $row['Item Total Price']  = strval($task['item_total_price']);
+                $row['Item Total Tax']  = strval($task['item_total_tax']);
+                $row['Item Total Price Before Tax']  = strval($task['item_total_price_before_tax']);
+                $row['Order By']  = cleanValue($task['order_by']);
+                $row['Status']  = cleanValue($task['status']);
+                $row['Schedule Date']  = cleanValue($task['schedule_date']);
+                $row['Schedule Datetime']  = cleanValue($task['schedule_datetime']);
+                $row['Created At']  = cleanValue($task['created_at']);
+                $row['Payment Method']  = cleanValue($task['payment_method']);
 
                 fputcsv($file, array(
                     $row['Order Number'],
@@ -116,11 +110,30 @@ class DashboardController extends Controller
                     $row['Created At'],
                     $row['Payment Method']
                 ));
+                fwrite($file, "\n");
             }
 
             fclose($file);
         };
 
         return response()->stream($callback, 200, $headers);
+    }
+
+    // Fungsi untuk membersihkan nilai dari karakter khusus
+    function cleanValue($value)
+    {
+        // Daftar karakter khusus yang ingin diganti atau dihapus
+        $specialCharacters = array(',', '"', "'", "\n", "\r");
+
+        // Ganti karakter khusus dengan karakter yang aman
+        $cleanValue = str_replace($specialCharacters, '', $value);
+
+        return $cleanValue;
+    }
+
+    function addLeadingCharacter($value)
+    {
+        // Tambahkan karakter khusus di depan nilai
+        return "'" . $value;
     }
 }

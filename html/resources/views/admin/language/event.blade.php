@@ -92,97 +92,97 @@
             @method("POST")
             <div class="uk-card uk-card-default uk-width-1-2@m card">
                 <div class="card-body">
-                    <h4>Div "Data tidak ditemukan"</h4>
+                    <h4>Div "Data tidak ditemukan" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" value="{{$event->nodata ?? ''}}" type="text" placeholder="" name="nodata">
                         </div>
                     </fieldset>
-                    <h4>Div "Header Tahun"</h4>
+                    <h4>Div "Header Tahun" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" value="{{$event->tahun_header ?? ''}}" type="text" placeholder="" name="tahun_header">
                         </div>
                     </fieldset>
-                    <h4>Div "Tombol Detail"</h4>
+                    <h4>Div "Tombol Detail" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" value="{{$event->btn_detail ?? ''}}" type="text" placeholder="" name="btn_detail">
                         </div>
                     </fieldset>
-                    <h4>Div "Januari"</h4>
+                    <h4>Div "Januari" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" type="text" value="{{$event->januari ?? ''}}" placeholder="" name="januari">
                         </div>
                     </fieldset>
-                    <h4>Div "Februari"</h4>
+                    <h4>Div "Februari" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" type="text" value="{{$event->februari ?? ''}}" placeholder="" name="februari">
                         </div>
                     </fieldset>
-                    <h4>Div "Maret"</h4>
+                    <h4>Div "Maret" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" type="text" value="{{$event->maret ?? ''}}" placeholder="" name="maret">
                         </div>
                     </fieldset>
-                    <h4>Div "April"</h4>
+                    <h4>Div "April" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" type="text" value="{{$event->april ?? ''}}" placeholder="" name="april">
                         </div>
                     </fieldset>
-                    <h4>Div "Mei"</h4>
+                    <h4>Div "Mei" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" type="text" value="{{$event->mei ?? ''}}" placeholder="" name="mei">
                         </div>
                     </fieldset>
-                    <h4>Div "Juni"</h4>
+                    <h4>Div "Juni" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" type="text" value="{{$event->juni ?? ''}}" placeholder="" name="juni">
                         </div>
                     </fieldset>
-                    <h4>Div "Juli"</h4>
+                    <h4>Div "Juli" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" type="text" value="{{$event->juli ?? ''}}" placeholder="" name="juli">
                         </div>
                     </fieldset>
-                    <h4>Div "Agustus"</h4>
+                    <h4>Div "Agustus" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" type="text" value="{{$event->agustus ?? ''}}" placeholder="" name="agustus">
                         </div>
                     </fieldset>
-                    <h4>Div "September"</h4>
+                    <h4>Div "September" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" type="text" value="{{$event->september ?? ''}}" placeholder="" name="september">
                         </div>
                     </fieldset>
-                    <h4>Div "Oktober"</h4>
+                    <h4>Div "Oktober" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" type="text" value="{{$event->oktober ?? ''}}" placeholder="" name="oktober">
                         </div>
                     </fieldset>
-                    <h4>Div "November"</h4>
+                    <h4>Div "November" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" type="text" value="{{$event->november ?? ''}}" placeholder="" name="november">
                         </div>
                     </fieldset>
-                    <h4>Div "Desember"</h4>
+                    <h4>Div "Desember" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" type="text" value="{{$event->desember ?? ''}}" placeholder="" name="desember">
                         </div>
                     </fieldset>
-                    <h4>Div "Acara Lainnya"</h4>
+                    <h4>Div "Acara Lainnya" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" type="text" value="{{$event->lainnya ?? ''}}" placeholder="" name="lainnya">
@@ -239,7 +239,29 @@
         $(this).on('click', '#button-save', function(e) {
             e.preventDefault();
 
-            submitForm();
+            // Memeriksa setiap input dalam form
+            var inputs = $('#formBerita input[type="text"]');
+            var isEmpty = false;
+
+            inputs.each(function() {
+                if ($(this).val() === '') {
+                    isEmpty = true;
+                    // Menampilkan pesan error di samping input yang kosong
+                    $(this).addClass('is-invalid');
+                    $(this).parent().append('<div style="font-size:17px;" class="invalid-feedback">* tidak boleh kosong.</div>');
+                } else {
+                    $(this).removeClass('is-invalid');
+                    $(this).parent().find('.invalid-feedback').remove();
+                }
+            });
+
+            // Jika ada input yang kosong, hentikan proses pengiriman formulir
+            if (isEmpty) {
+                return false;
+            } else {
+                // Jika semua input sudah diisi, kirim formulir
+                submitForm();
+            }
         });
 
 

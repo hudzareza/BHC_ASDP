@@ -92,55 +92,55 @@
             @method("POST")
             <div class="uk-card uk-card-default uk-width-1-2@m card">
                 <div class="card-body">
-                    <h4>Div "Customer Service:"</h4>
+                    <h4>Div "Customer Service:" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" value="{{$contact->customer ?? ''}}" type="text" placeholder="" name="customer">
                         </div>
                     </fieldset>
-                    <h4>Div "Email"</h4>
+                    <h4>Div "Email" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" value="{{$contact->email ?? ''}}" type="text" placeholder="" name="email">
                         </div>
                     </fieldset>
-                    <h4>Div "Whatsapp"</h4>
+                    <h4>Div "Whatsapp" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" value="{{$contact->whatsapp ?? ''}}" type="text" placeholder="" name="whatsapp">
                         </div>
                     </fieldset>
-                    <h4>Div "Sosial Media"</h4>
+                    <h4>Div "Sosial Media" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" value="{{$contact->social ?? ''}}" type="text" placeholder="" name="social">
                         </div>
                     </fieldset>
-                    <h4>Div "Kontak Kami"</h4>
+                    <h4>Div "Kontak Kami" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" value="{{$contact->kontak_kami ?? ''}}" type="text" placeholder="" name="kontak_kami">
                         </div>
                     </fieldset>
-                    <h4>Div "Teks Kotak Kami"</h4>
+                    <h4>Div "Teks Kotak Kami" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" value="{{$contact->deskripsi ?? ''}}" type="text" placeholder="" name="deskripsi">
                         </div>
                     </fieldset>
-                    <h4>Div "Nama Lengkap"</h4>
+                    <h4>Div "Nama Lengkap" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" value="{{$contact->nama_lengkap ?? ''}}" type="text" placeholder="" name="nama_lengkap">
                         </div>
                     </fieldset>
-                    <h4>Div "Apa yang dapat kami bantu?"</h4>
+                    <h4>Div "Apa yang dapat kami bantu?" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" value="{{$contact->bantuan ?? ''}}" type="text" placeholder="" name="bantuan">
                         </div>
                     </fieldset>
-                    <h4>Div "Tombol Kirim"</h4>
+                    <h4>Div "Tombol Kirim" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" value="{{$contact->btn_kirim ?? ''}}" type="text" placeholder="" name="btn_kirim">
@@ -197,7 +197,29 @@
         $(this).on('click', '#button-save', function(e) {
             e.preventDefault();
 
-            submitForm();
+            // Memeriksa setiap input dalam form
+            var inputs = $('#formBerita input[type="text"]');
+            var isEmpty = false;
+
+            inputs.each(function() {
+                if ($(this).val() === '') {
+                    isEmpty = true;
+                    // Menampilkan pesan error di samping input yang kosong
+                    $(this).addClass('is-invalid');
+                    $(this).parent().append('<div style="font-size:17px;" class="invalid-feedback">* tidak boleh kosong.</div>');
+                } else {
+                    $(this).removeClass('is-invalid');
+                    $(this).parent().find('.invalid-feedback').remove();
+                }
+            });
+
+            // Jika ada input yang kosong, hentikan proses pengiriman formulir
+            if (isEmpty) {
+                return false;
+            } else {
+                // Jika semua input sudah diisi, kirim formulir
+                submitForm();
+            }
         });
 
 

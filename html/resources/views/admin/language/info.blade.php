@@ -92,25 +92,25 @@
             @method("POST")
             <div class="uk-card uk-card-default uk-width-1-2@m card">
                 <div class="card-body">
-                    <h4>Div "Header Info (breadcumb)"</h4>
+                    <h4>Div "Header Info (breadcumb)" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" value="{{$info->info ?? ''}}" type="text" placeholder="" name="info">
                         </div>
                     </fieldset>
-                    <h4>Div "Detil (breadcumb)"</h4>
+                    <h4>Div "Detil (breadcumb)" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" value="{{$info->detail ?? ''}}" type="text" placeholder="" name="detail">
                         </div>
                     </fieldset>
-                    <h4>Div "Tombol Selengkapnya"</h4>
+                    <h4>Div "Tombol Selengkapnya" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" value="{{$info->btn_selengkapnya ?? ''}}" type="text" placeholder="" name="btn_selengkapnya">
                         </div>
                     </fieldset>
-                    <h4>Div "Info Lainnya"</h4>
+                    <h4>Div "Info Lainnya" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" value="{{$info->lainnya ?? ''}}" type="text" placeholder="" name="lainnya">
@@ -167,7 +167,29 @@
         $(this).on('click', '#button-save', function(e) {
             e.preventDefault();
 
-            submitForm();
+            // Memeriksa setiap input dalam form
+            var inputs = $('#formBerita input[type="text"]');
+            var isEmpty = false;
+
+            inputs.each(function() {
+                if ($(this).val() === '') {
+                    isEmpty = true;
+                    // Menampilkan pesan error di samping input yang kosong
+                    $(this).addClass('is-invalid');
+                    $(this).parent().append('<div style="font-size:17px;" class="invalid-feedback">* tidak boleh kosong.</div>');
+                } else {
+                    $(this).removeClass('is-invalid');
+                    $(this).parent().find('.invalid-feedback').remove();
+                }
+            });
+
+            // Jika ada input yang kosong, hentikan proses pengiriman formulir
+            if (isEmpty) {
+                return false;
+            } else {
+                // Jika semua input sudah diisi, kirim formulir
+                submitForm();
+            }
         });
 
 

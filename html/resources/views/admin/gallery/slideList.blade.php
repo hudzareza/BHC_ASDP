@@ -7,33 +7,34 @@
 @endsection
 
 @section('custom-css')
-    
+
 @endsection
 
 @section('content-title')
 <style>
-.container {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  padding-top: 56.25%; /* 16:9 Aspect Ratio */
-  background-color: burlywood;
-}
+    .container {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        padding-top: 56.25%;
+        /* 16:9 Aspect Ratio */
+        background-color: burlywood;
+    }
 
-.responsive-iframe {
-  position: absolute;
-  top: 18px;
-  left: 35px;
-  bottom: 0;
-  right: 0;
-  width: 90%;
-  height: 90%;
-  border: none;
-}
+    .responsive-iframe {
+        position: absolute;
+        top: 18px;
+        left: 35px;
+        bottom: 0;
+        right: 0;
+        width: 90%;
+        height: 90%;
+        border: none;
+    }
 </style>
 <div class="row mb-2">
     <div class="col-8 d-flex align-items-center">
-    Slide Banner
+        Slide Banner
     </div>
     <div class="col-4">
         <div class="input-group">
@@ -47,9 +48,9 @@
 @section('content')
 <div class="row merged20 mb-4">
     <div class="col-lg-12">
-    <div id="iframe" style="display:none;"></div>
+        <div id="iframe" style="display:none;"></div>
         <div class="d-widget">
-            <table id="lists" class="table table-default all-events table-striped table-responsive-lg">
+            <table class="lists" id="myTableList">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -86,18 +87,18 @@
 
 @section('custom-js')
 <script>
-    function openIframe(){
-    var iframe = '<div class="container" id="con"><iframe class="responsive-iframe" id="iframeFoto" src="{{ route("admin.add.banner") }}" allowfullscreen></iframe></div>';
+    function openIframe() {
+        var iframe = '<div class="container" id="con"><iframe class="responsive-iframe" id="iframeFoto" src="{{ route("admin.add.banner") }}" allowfullscreen></iframe></div>';
         $("#iframe").html(iframe);
         $("#iframe").show(500);
         $('#iframe-pick').hide();
-        $('#lists').hide();
+        $('.lists').hide();
     }
-    function closeIframeArtikel(){
+
+    function closeIframeArtikel() {
         $("#iframe").hide(500);
         $('#iframe-pick').show();
-        $('#lists').show(200);
+        $('.lists').show(200);
     }
-    
 </script>
 @endsection

@@ -38,7 +38,7 @@
 							<!-- Jelajah BHC -->
 							<img src="{{ asset('assets/images/keyboard-arrow-down.svg') }}">
 						</a>
-						<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="min-width: fit-content;">
 							<?
 							$kode = app()->getLocale();
 							?>
@@ -125,13 +125,6 @@
 					</a>
 				</li>
 				<li class="nav-item dropdown">
-					<!-- <div style="position: relative;">
-							<div id="google_translate_element" style="position: relative; opacity: 0;"></div>
-							<button class="btngoogletr" style="position: absolute; left: 0; top: 0; z-index: -1;">
-								Bahasa<img style="position: absolute;" src="{{ asset('assets/images/keyboard-arrow-down.svg') }}">
-							</button>
-						</div> -->
-					<!-- <div id="google_translate_element"></div> -->
 					<a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
 						{{ __('navbar.bahasa') }}
 

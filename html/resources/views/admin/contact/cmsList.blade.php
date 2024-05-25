@@ -21,7 +21,7 @@
 <div class="row merged20 mb-4">
     <div class="col-lg-12">
         <div class="d-widget">
-            <table id="myTable">
+            <table id="myTableBahasa">
                 <thead>
                     <tr>
                         <th>#</th>

@@ -5,10 +5,10 @@
 
 <body>
 
-    @include('shared.navbar')
+	@include('shared.navbar')
 
 	<main>
-		
+
 		<section class="k_e_1">
 			<div class="main-banner" style="background: url('assets/images/banner/bhc_51.png')">
 				<div class="dark-transparent"></div>
@@ -16,7 +16,7 @@
 					<p class="title notranslate">FAQ</p>
 					<nav aria-label="breadcrumb">
 						<ol class="breadcrumbs">
-							<li class="breadcrumb-item"><a href="{{route('home')}}">Beranda</a></li>
+							<li class="breadcrumb-item"><a href="{{route('home')}}">{{ __('navbar.beranda') }}</a></li>
 							<li class="breadcrumb-item"><img src="{{asset('assets/images/arrow-right.png')}}"></li>
 							<li class="breadcrumb-item active notranslate" aria-current="page"><a href="{{route('faq.main')}}">FAQ</a></li>
 						</ol>
@@ -44,7 +44,7 @@
 											</h5>
 											<div id="collapseOne{{$list->id}}" class="accordion-collapse collapse " aria-labelledby="headingOne{{$list->id}}" data-bs-parent="#accordionRental">
 												<div class="accordion-body text-sm opacity-8">
-												{!! nl2br(e($list->answer)) !!}
+													{!! nl2br(e(strip_tags($list->answer))) !!}
 												</div>
 											</div>
 										</div>
@@ -59,11 +59,11 @@
 		</section>
 	</main>
 
-    @include('shared.footer')
-    @include('shared.modal_auth')
-    @include('shared.script')
+	@include('shared.footer')
+	@include('shared.modal_auth')
+	@include('shared.script')
 
-    <script type="text/javascript">
+	<script type="text/javascript">
 		if (document.getElementById('typed')) {
 			var typed = new Typed("#typed", {
 				stringsElement: '#typed-strings',

@@ -20,24 +20,25 @@ class ContactController extends Controller
 
     public function store(Request $request)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         // print_r($_POST);die();
         $request->validate([
-            '_token' => 'required|string',
-            'name' => 'required|string',
-            'email' => 'required|string',
-            'content' => 'required|string'
+            'contact_name' => 'required|string',
+            'contact_email' => 'required|email',
+            'contact_content' => 'required|string'
         ]);
-        
+
         $berita = new Contact_us;
-        $berita->name = $request->name;
-        $berita->email = $request->email;
-        $berita->content = $request->content;
-        
+        $berita->name = $request->contact_name;
+        $berita->email = $request->contact_email;
+        $berita->content = $request->contact_content;
+
         $berita->created_at = date("Y-m-d H:i:s");
         // $berita->created_by = Auth::user()->id;
 
         if ($berita->save()) {
-            return redirect()->route('kontak.main')->withSuccess('Succesfully created message');
+            return redirect()->route('kontak.main')->withSuccess('Succesfully send message');
         } else {
             return back()->withSuccess('Failed created');
         }
@@ -46,7 +47,7 @@ class ContactController extends Controller
 
     public function cmsList(): View
     {
-        $beritas = Contact_us::all();
+        $beritas = Contact_us::all()->sortByDesc('id');
         // print_r($beritas);die();
         return view('admin.contact.cmsList',  compact('beritas'));
     }
@@ -73,7 +74,7 @@ class ContactController extends Controller
 
         // Find article Data
         $beritas = Contact_us::findOrFail($decryptedId);
-        return view('admin.info.cmsList', compact('beritas'));        
+        return view('admin.info.cmsList', compact('beritas'));
     }
 
     public function cmsAdd(): View

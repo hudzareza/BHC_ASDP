@@ -98,26 +98,26 @@
 				<div class="info-bhc">
 					<p>{{__('kontak.kontak_kami')}}</p>
 					<p class="text-center desc-kontak">{{__('kontak.deskripsi')}}</p>
-					<form class="form-kontak" method="POST" action="{{route('kontak.store')}}">
+					<form id="formContact" class="form-kontak" method="POST" action="{{route('kontak.store')}}">
 						@csrf
 						<div class="row">
 							<div class="col-md-6 mb-3">
 								<label>{{__('kontak.nama_lengkap')}}</label>
-								<input name="name" type="text" class="form-control" placeholder="{{__('kontak.nama_lengkap')}}" aria-label="First name">
+								<input name="contact_name" type="text" class="form-control" placeholder="{{__('kontak.nama_lengkap')}}" aria-label="First name">
 							</div>
 							<div class="col-md-6 mb-3">
 								<label class="notranslate">{{__('kontak.email')}}</label>
-								<input name="email" type="text" class="form-control notranslate" placeholder="{{__('kontak.email')}}" aria-label="Last name">
+								<input name="contact_email" type="text" class="form-control notranslate" placeholder="{{__('kontak.email')}}" aria-label="Last name">
 							</div>
 							<div class="col-md-12 mb-3">
 								<label>{{__('kontak.bantuan')}}</label>
-								<textarea name="content" class="form-control" rows="5" placeholder=""></textarea>
-							</div>
-							<div class="text-center">
-								<button class="btn-green">{{__('kontak.btn_kirim')}}</button>
+								<textarea name="contact_content" class="form-control" rows="5" placeholder=""></textarea>
 							</div>
 						</div>
 					</form>
+					<div class="text-center">
+						<button id="btnContact" class="btn-green">{{__('kontak.btn_kirim')}}</button>
+					</div>
 				</div>
 			</div>
 		</section>
@@ -126,6 +126,81 @@
 	@include('shared.footer')
 	@include('shared.modal_auth')
 	@include('shared.script')
+
+	<script>
+		$(document).ready(function() {
+			$(this).on('click', '#btnContact', function(e) {
+				e.preventDefault();
+
+				var contactName = false;
+				var contactEmail = false;
+				var contactContent = false;
+
+				var inputs1 = $('#formContact input[name="contact_name"]');
+
+				inputs1.each(function() {
+					// Memeriksa apakah input teks, nomor, atau email kosong
+					if ($(this).val() === '') {
+						contactName = true;
+						// Menampilkan pesan error di samping input yang kosong
+						$(this).addClass('is-invalid');
+						$(this).parent().append('<div style="font-size:17px;" class="invalid-feedback">This field cannot be empty.</div>');
+					} else {
+						$(this).removeClass('is-invalid');
+						$(this).parent().find('.invalid-feedback').remove();
+					}
+
+				});
+
+				// Memeriksa setiap input dalam form
+				var inputs2 = $('#formContact input[name="contact_email"]');
+
+				inputs2.each(function() {
+					// Memeriksa apakah input teks, nomor, atau email kosong
+					if ($(this).val() === '') {
+						contactEmail = true;
+						// Menampilkan pesan error di samping input yang kosong
+						$(this).addClass('is-invalid');
+						$(this).parent().append('<div style="font-size:17px;" class="invalid-feedback">This field cannot be empty.</div>');
+					} else {
+						$(this).removeClass('is-invalid');
+						$(this).parent().find('.invalid-feedback').remove();
+					}
+
+				});
+
+				// Memeriksa setiap input dalam form
+				var inputs3 = $('#formContact textarea');
+
+				inputs3.each(function() {
+					// Memeriksa apakah input teks, nomor, atau email kosong
+					if ($(this).val() === '') {
+						contactContent = true;
+						// Menampilkan pesan error di samping input yang kosong
+						$(this).addClass('is-invalid');
+						$(this).parent().append('<div style="font-size:17px;" class="invalid-feedback">This field cannot be empty.</div>');
+					} else {
+						$(this).removeClass('is-invalid');
+						$(this).parent().find('.invalid-feedback').remove();
+					}
+
+				});
+
+				// Jika ada input yang kosong, hentikan proses pengiriman formulir
+				if (contactName === true || contactEmail === true || contactContent === true) {
+					return false;
+				} else {
+					// Jika semua input sudah diisi, kirim formulir
+					submitFormContact();
+				}
+			});
+
+		});
+
+		async function submitFormContact() {
+			$('#formContact').submit();
+		}
+	</script>
 
 </body>
 

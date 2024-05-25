@@ -39,12 +39,11 @@ class AuthController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            '_token' => 'required|string',
             'name' => 'required|string|max:250',
-            'email' => 'required|email|max:250|unique:users',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8'
         ]);
-        
+
         // $role = 'user';
         // User::create([
         //     'name' => $request->name,
@@ -56,8 +55,8 @@ class AuthController extends Controller
         $Usercontent->name = $request->name;
         $Usercontent->email = $request->email;
         $Usercontent->phone_number = '';
-        // $Usercontent->created_by = '';
-        // $Usercontent->updated_by = '';
+        $Usercontent->created_by = ' ';
+        $Usercontent->updated_by = ' ';
         $Usercontent->password = Hash::make($request->password);
         $Usercontent->role = 'user';
 
@@ -66,10 +65,10 @@ class AuthController extends Controller
         $request->session()->regenerate();
         if ($Usercontent->save()) {
             return redirect()->route('home')->withSuccess('You have successfully registered & logged in');
-        }else{
+        } else {
             return redirect()->route('home')->withErrors('Failed registered');
         }
-            // return redirect()->route('home')
+        // return redirect()->route('home')
         // ->withSuccess('You have successfully registered & logged in!');
     }
 
@@ -97,8 +96,7 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        if(Auth::attempt($credentials))
-        {
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             return redirect()->route('home')->withSuccess('You have successfully logged in!');
 
@@ -109,9 +107,8 @@ class AuthController extends Controller
         return redirect()->route('home')->withErrors([
             'email' => 'Your email or password do not match in our records.',
         ])->onlyInput('email');
+    }
 
-    } 
-    
     /**
      * Log out the user from application.
      *
@@ -125,6 +122,18 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
         return redirect()->route('home')
             ->withSuccess('You have logged out successfully!');;
-    }    
+    }
 
+    public function checkEmail(Request $request)
+    {
+        $email = $request->input('email');
+
+        $user = User::where('email', $email)->first();
+
+        if ($user) {
+            return response()->json(['exists' => true]);
+        } else {
+            return response()->json(['exists' => false]);
+        }
+    }
 }

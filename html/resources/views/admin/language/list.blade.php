@@ -28,7 +28,7 @@
 <div class="row merged20 mb-4">
     <div class="col-lg-12">
         <div class="d-widget">
-            <table class="table table-default all-events table-striped table-responsive-lg">
+            <table id="myTableBahasa">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -54,11 +54,8 @@
                         <td>
                             <div class="button soft-primary"><a href="{{ route('admin.edit.lang', encrypt($berita->id)) }}">Edit</a></div>
                             <div class="button soft-success"><a href="{{ route('admin.layout.lang', encrypt($berita->id)) }}">Add Layout</a></div>
+                            <div class="button soft-danger"><a href="{{ route('admin.delete.lang', encrypt($berita->id)) }}" onclick="return confirm('Are you Sure delete?')"><i class="icofont-trash"></i></a></div>
                         </td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="7"></td>
                     </tr>
                     @endforeach
                 </tbody>

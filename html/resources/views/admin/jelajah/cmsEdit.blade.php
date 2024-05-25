@@ -198,7 +198,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            <button type="button" class="btn btn-primary" id="crop" data-dismiss="modal">Crop</button>
+                            <button type="button" class="btn btn-primary" style="margin-top: auto !important;" id="crop" data-dismiss="modal">Crop</button>
                         </div>
                     </div>
                 </div>
@@ -209,16 +209,22 @@
                     <h4>Title</h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
-                            <input class="uk-input" value="{{$berita->title}}" type="text" placeholder="Ketikan Judul" name="title">
+                            <input class="uk-input" value="{{$berita->title}}" type="text" placeholder="Ketikan Judul" name="title" maxlength="75" id="titleInput">
+                        </div>
+                        <div class="uk-margin">
+                            <span id="charCount">0</span>/75 characters
                         </div>
                     </fieldset>
                     <div class="s-desc">
                         <h4 class="sc-left">Sub Title </h4>
-                        <small class="sc-right text-danger">(Maksimal 255 Karakter)</small>
+                        <small class="sc-right text-danger">(Maksimal 150 Karakter)</small>
                     </div>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
-                            <textarea class="uk-textarea" rows="5" placeholder="Sub Judul" name="description">{{$berita->description}}</textarea>
+                            <textarea class="uk-textarea" rows="5" placeholder="Sub Judul" name="description" maxlength="150" id="textInput">{{$berita->description}}</textarea>
+                        </div>
+                        <div class="uk-margin">
+                            <span id="charCountText">0</span>/150 characters
                         </div>
                     </fieldset>
                     <h4>Content</h4>
@@ -246,7 +252,9 @@
                                 background-repeat:no-repeat;
                                 display: inline-block;
                                 box-shadow:0px -3px 6px 2px rgba(0,0,0,0.2);
-                                "></div>
+                                ">
+                                    <input type="hidden" value="<?= $exp ?>" name="galeri[]">
+                                </div>
                                 <label class="btn btn-primary">
                                     Upload<input type="file" accept="image/jpg, image/png, image/jpeg" class="uploadFile img" value="" name="gallery[]" style="width: 0px;height: 0px;overflow: hidden;" multiple>
                                 </label>
@@ -285,16 +293,18 @@
                     </fieldset>
                     <h4>Select Languange</h4>
                     <fieldset class="uk-fieldset">
+                        @foreach(App\Models\Language::all()->sortByDesc('id') as $lang)
                         <div class="uk-margin">
                             <label>
-                                <input type="radio" id="front" value="id" name="kode" <?php if ($berita->kode == 'id') echo 'checked'; ?>> Bahasa Indonesia
+                                <input type="radio" id="front" value="{{$lang->kode}}" name="kode" <?php if ($berita->kode == $lang->kode) echo 'checked'; ?>> {{$lang->alias}}
                             </label>
                         </div>
-                        <div class="uk-margin">
+                        @endforeach
+                        <!-- <div class="uk-margin">
                             <label>
-                                <input type="radio" id="front" value="en" name="kode" <?php if ($berita->kode == 'en') echo 'checked'; ?>> English
+                                <input type="radio" id="front" value="en" name="kode"> English
                             </label>
-                        </div>
+                        </div> -->
                     </fieldset>
                 </div>
                 <div class="col-12 px-0">
@@ -315,15 +325,36 @@
 <script src="{{ asset('backend/js/tinymce.min.js') }}"></script>
 
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const titleInput = document.getElementById("titleInput");
+        const charCount = document.getElementById("charCount");
+        const textInput = document.getElementById("textInput");
+        const charCountText = document.getElementById("charCountText");
+
+        titleInput.addEventListener("input", function() {
+            charCount.textContent = titleInput.value.length;
+        });
+
+        textInput.addEventListener("input", function() {
+            charCountText.textContent = textInput.value.length;
+        });
+    });
+
+
     $(".imgAdd").click(function() {
-        $(this).closest(".row").find('.imgAdd').before('<div class="col-sm-4 imgUp"><div class="imagePreview"></div><label class="btn btn-primary">Upload<input type="file" accept="image/jpg, image/png, image/jpeg" class="uploadFile img" value="Upload Photo" name="gallery[]" style="width:0px;height:0px;overflow:hidden;"></label><i class="icofont-close del"></i></div>');
+        var imgNum = $('.imgUp').length; // Get the current number of uploaded images
+        if (imgNum < 6) { // Check if the number of uploaded images is less than 6
+            $(this).closest(".row").find('.imgAdd').before('<div class="col-sm-4 imgUp"><div class="imagePreview"></div><label class="btn btn-primary">Upload<input type="file" accept="image/jpg, image/png, image/jpeg" class="uploadFile img" value="Upload Photo" name="gallery[]" style="width:0px;height:0px;overflow:hidden;"></label><i class="icofont-close del"></i></div>');
+        } else {
+            alert("Maksimal 6 foto."); // Display an alert if the maximum limit is reached
+        }
     });
 
     $(document).on("click", "i.del", function() {
         // 	to remove card
         $(this).parent().remove();
         // to clear image
-        // $(this).parent().find('.imagePreview').css("background-image","url('')");
+        $(this).parent().find('.imagePreview').css("background-image", "url('')");
     });
 
     $(function() {

@@ -55,11 +55,11 @@
 					<div class="d-flex">
 						<div class="fill-flex">
 							<ul class="list-tiket-content">
-								<li><img src="{{asset('images/article/ticket/').'/'.$tklist->photo}}" class="img-logo-tiket"></li>
+								<li><img src="{{asset('images/article/').'/'.$tklist->photo}}" class="img-logo-tiket"></li>
 								<li>
 									<p class="notranslate">{{ucwords($tklist->name)}}</p>
 								</li>
-								<li><a href="{{$tklist->url}}" class="btn-green" target="_blank">{{__('tiket.btn_tiket')}}</a></li>
+								<li><a href="https://{{$tklist->url}}" class="btn-green" target="_blank">{{__('tiket.btn_tiket')}}</a></li>
 							</ul>
 						</div>
 					</div>

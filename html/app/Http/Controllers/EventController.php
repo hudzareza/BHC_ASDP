@@ -27,20 +27,38 @@ class EventController extends Controller
      */
     public function index(): View
     {
-        date_default_timezone_set('UTC');
+
+        $kode = app()->getLocale();
+
+        date_default_timezone_set('Asia/Jakarta');
         // ** uncomment if activate mode set event
         $active = Activedate::where('void', '1')->latest()->paginate(1);
 
         $data = json_decode(json_encode($active), true);
-        // print_r($data);die();
         if (empty($data['data'])) {
-            $month = date("m");
+            if (date("m") == '01') {
+                $month = '1';
+            } elseif (date("m") == '02') {
+                $month = '2';
+            } elseif (date("m") == '03') {
+                $month = '3';
+            } elseif (date("m") == '04') {
+                $month = '4';
+            } elseif (date("m") == '05') {
+                $month = '5';
+            } elseif (date("m") == '06') {
+                $month = '6';
+            } elseif (date("m") == '07') {
+                $month = '7';
+            } elseif (date("m") == '08') {
+                $month = '8';
+            } elseif (date("m") == '09') {
+                $month = '9';
+            }
             $year = $this->year(date("Y"));
             $monthName = $this->month(date("m"));
             $yearName = date("Y");
         } else {
-            # code...
-
             $month = $active[0]->month;
             $year = $active[0]->year;
 
@@ -48,13 +66,20 @@ class EventController extends Controller
             $yearName = $this->yearAlt($year);
         }
 
-        $beritas = Event::where('month', $month)->where('year', $year)->where('approved', '1')->get();
+        $beritas = Event::where('month', $month)
+            ->where('year', $year)
+            ->where('approved', '1')
+            ->where('kode', '=', $kode)
+            ->get();
+
 
         return view('event.index', compact('beritas', 'monthName', 'yearName', 'year'));
     }
 
     public function detail($id): View
     {
+        $kode = app()->getLocale();
+
         $data = DB::table('events')
             ->where('id', '=', $id)->get();
 
@@ -64,15 +89,22 @@ class EventController extends Controller
         $monthName = $this->monthAlt($month);
         $yearName = $this->yearAlt($year);
 
-        $beritas = Event::where('month', $month)->where('year', $year)->latest()->paginate(4);
+        $beritas = Event::where('year', $year)->where('kode', '=', $kode)->paginate(4)->sortByDesc('id');
+        // $sliceRecord = $slice->slice(1);
+        // $beritas = $sliceRecord->all();
         // print_r($data);die();
         return view('event.detail', compact('data', 'monthName', 'yearName', 'beritas'));
     }
 
     public function kanal($id, $params): View
     {
+        $kode = app()->getLocale();
 
-        $beritas = Event::where('month', $id)->where('year', $params)->where('approved', '1')->get();
+        $beritas = Event::where('month', $id)
+            ->where('year', $params)
+            ->where('approved', '1')
+            ->where('kode', '=', $kode)
+            ->get();
         // $beritas = json_decode(json_encode($beritas), true);
 
         // print_r($beritas);die();
@@ -85,7 +117,7 @@ class EventController extends Controller
 
     public function setactivedate(Request $request)
     {
-        date_default_timezone_set('UTC');
+        date_default_timezone_set('Asia/Jakarta');
         // print_r($_POST);die();
         $berita = new Activedate;
         $berita->month = $request->month;
@@ -104,6 +136,7 @@ class EventController extends Controller
 
     public function autodate(Request $request)
     {
+        date_default_timezone_set('Asia/Jakarta');
         // print_r($_POST);die();
         $date = Activedate::latest()->paginate(1);
         $date = json_decode(json_encode($date), true);
@@ -133,10 +166,12 @@ class EventController extends Controller
 
     public function store(Request $request)
     {
-        date_default_timezone_set('UTC');
+        date_default_timezone_set('Asia/Jakarta');
         $request->validate([
-            '_token' => 'required|string',
             'photo' => 'required',
+            'month' => 'required',
+            'year' => 'required',
+            'kode' => 'required',
             'title' => 'required|string',
             'description' => 'required|string',
             'content' => 'required|string'
@@ -162,6 +197,7 @@ class EventController extends Controller
             $berita->description = $request->description;
         }
 
+        $berita->kode = $request->kode;
         $berita->approved = $request->status;
         $berita->month = $request->month;
         $berita->year = $request->year;
@@ -172,7 +208,8 @@ class EventController extends Controller
         if ($berita->save()) {
             return redirect()->route('admin.list.artikel.event')->withSuccess('Succesfully created event');
         } else {
-            return back()->withSuccess('Failed created event');
+            return redirect()->route('admin.list.artikel.event')->withErrors(['error' => 'Failed created event']);
+            // return back()->withSuccess('Failed created event');
         }
     }
 
@@ -209,14 +246,15 @@ class EventController extends Controller
             ->get();
         $monthlist = Month::all()->sortBy('id');
         $yearlist = Year::all()->sortBy('id');
-        // print_r($year);die();
+        // print_r($berita);
+        // die();
 
         return view('admin.event.cmsEdit', compact('berita', 'month', 'year', 'monthlist', 'yearlist'));
     }
 
     public function update(Request $request, $id)
     {
-        date_default_timezone_set('UTC');
+        date_default_timezone_set('Asia/Jakarta');
         // Decrypt article ID
         $decryptedId = decrypt($id);
 
@@ -224,7 +262,9 @@ class EventController extends Controller
         $berita = Event::findOrFail($decryptedId);
 
         $request->validate([
-            '_token' => 'required|string',
+            'month' => 'required',
+            'year' => 'required',
+            'kode' => 'required',
             'title' => 'required|string',
             'description' => 'required|string',
             'content' => 'required|string'
@@ -253,7 +293,7 @@ class EventController extends Controller
         if ($request->has('description')) {
             $berita->description = $request->description;
         }
-
+        $berita->kode = $request->kode;
         $berita->approved = $request->status;
         $berita->month = $request->month;
         $berita->year = $request->year;
@@ -353,7 +393,7 @@ class EventController extends Controller
 
     public function storeslider(Request $request)
     {
-        date_default_timezone_set('UTC');
+        date_default_timezone_set('Asia/Jakarta');
         $berita = new Sliderevent;
         $berita->id_event = $request->id;
         $berita->created_at = date("Y-m-d H:i:s");

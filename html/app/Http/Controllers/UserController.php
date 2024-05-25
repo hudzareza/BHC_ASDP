@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Input;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Hash;
+
 class UserController extends Controller
 {
     public function list(Request $request)
@@ -25,8 +26,8 @@ class UserController extends Controller
     {
         $data = Role::all();
         $role = json_decode(json_encode($data), true);
-        
-        return view('admin.user.add' , compact('role'));
+
+        return view('admin.user.add', compact('role'));
     }
 
     /**
@@ -37,26 +38,26 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         $request->validate([
-            '_token' => 'required|string',
             'name' => 'required|string',
-            'email' => 'required|string',
-            'role' => 'required|string',
+            'email' => 'required|email|unique:users,email', // Menambahkan aturan unik untuk memastikan email adalah unik
             'password' => 'required|string',
-            'phone_number' => 'required|string'
+            'role' => 'required|string', // Anda mungkin perlu menyesuaikan ini sesuai kebutuhan Anda
         ]);
-        
+
         $berita = new User;
         $berita->name = $request->name;
         $berita->email = $request->email;
         $berita->phone_number = $request->phone_number;
         $berita->role = $request->role;
         $berita->password = Hash::make($request->password);
-        
+
         $berita->created_at = date("Y-m-d H:i:s");
         // $berita->created_by = Auth::user()->id;
-        // $berita->created_by = '';
-        // $berita->updated_by = '';
+        $berita->created_by = ' ';
+        $berita->updated_by = ' ';
 
         if ($berita->save()) {
             return redirect()->route('admin.list.user')->withSuccess('Succesfully created');
@@ -94,7 +95,7 @@ class UserController extends Controller
 
         // print_r($berita);die();
 
-        return view('admin.user.edit', compact('berita','role'));
+        return view('admin.user.edit', compact('berita', 'role'));
     }
 
     /**
@@ -106,12 +107,14 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         // Decrypt article ID
         $decryptedId = decrypt($id);
 
         // Find article Data
         $berita = User::findOrFail($decryptedId);
-        
+
         $request->validate([
             '_token' => 'required|string',
             'name' => 'required|string',
@@ -120,19 +123,19 @@ class UserController extends Controller
             // 'password' => 'required|string',
             'phone_number' => 'required|string'
         ]);
-        
+
         $berita->name = $request->name;
         $berita->email = $request->email;
         $berita->phone_number = $request->phone_number;
         $berita->role = $request->role;
 
-        
+
         if (empty($request->password)) {
             $berita->password = $berita->password;
-        }else {
-            $berita->password = Hash::make($request->password);    
+        } else {
+            $berita->password = Hash::make($request->password);
         }
-        
+
         $berita->updated_at = date("Y-m-d H:i:s");
         // $berita->created_by = Auth::user()->id;
 
@@ -164,5 +167,16 @@ class UserController extends Controller
         }
     }
 
-    
+    public function checkEmail(Request $request)
+    {
+        $email = $request->input('email');
+
+        $user = User::where('email', $email)->first();
+
+        if ($user) {
+            return response()->json(['exists' => true]);
+        } else {
+            return response()->json(['exists' => false]);
+        }
+    }
 }

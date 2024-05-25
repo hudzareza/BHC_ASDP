@@ -140,6 +140,7 @@ Route::put('/admin/update-user/{id?}', [UserController::class, 'update'])->name(
 Route::get('/admin/delete-user/{id}', [UserController::class, 'destroy'])->name('admin.delete.user')->middleware('auth', 'admin');
 Route::get('/admin/status-user/{id?}/{params?}', [UserController::class, 'changeStatus'])->name('admin.change.user')->middleware('auth', 'admin');
 Route::post('admin/user/post', [UserController::class, 'store'])->name('admin.user.store')->middleware('auth', 'admin');
+Route::post('admin/check-email', [UserController::class, 'checkEmail'])->name('check-email')->middleware('auth', 'admin');
 
 // language 
 Route::get('/admin/language', [LanguageController::class, 'list'])->name('admin.list.lang')->middleware('auth', 'admin');
@@ -169,7 +170,8 @@ Route::get('/admin/language-promo-layout/{id?}', [LanguageController::class, 'pr
 Route::post('/admin/promo-upsert/{id?}', [LanguageController::class, 'promoUpsert'])->name('admin.upsert.promo')->middleware('auth', 'admin');
 Route::get('/admin/language-contact-layout/{id?}', [LanguageController::class, 'contact'])->name('admin.add.contact')->middleware('auth', 'admin');
 Route::post('/admin/contact-upsert/{id?}', [LanguageController::class, 'contactUpsert'])->name('admin.upsert.contact')->middleware('auth', 'admin');
-
+Route::get('/admin/language-profile-layout/{id?}', [LanguageController::class, 'profile'])->name('admin.add.profile')->middleware('auth', 'admin');
+Route::post('/admin/profile-upsert/{id?}', [LanguageController::class, 'profileUpsert'])->name('admin.upsert.profile')->middleware('auth', 'admin');
 
 // role 
 Route::get('/admin/role', [RoleController::class, 'list'])->name('admin.list.role')->middleware('auth', 'admin');
@@ -215,10 +217,12 @@ Route::get('/register/admin', [AdminauthController::class, 'register'])->name('r
 Route::post('/store/admin', [AdminauthController::class, 'store'])->name('store.admin');
 Route::post('/authenticate/admin', [AdminauthController::class, 'authenticate'])->name('authenticate.admin');
 Route::post('/logout/admin', [AdminauthController::class, 'logout'])->name('logout.admin');
+Route::post('/check-email', [AuthController::class, 'checkEmail'])->name('cek-email');
+
 
 Route::get('locale/{locale}', function ($locale) {
     app()->setLocale($locale);
     session()->put('locale', $locale);
 
-    return redirect()->back();
+    return redirect('/');
 })->name('locale');

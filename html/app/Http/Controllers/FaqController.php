@@ -20,13 +20,15 @@ class FaqController extends Controller
      */
     public function index(): View
     {
-        $beritas = Faq::where('approved',"1")->get();
+        $kode = app()->getLocale();
+
+        $beritas = Faq::where('approved', "1")->where('kode', '=', $kode)->get();
 
         return view('faq.index', compact('beritas'));
     }
 
     // admin
-    
+
     public function cmslist()
     {
         //
@@ -54,16 +56,19 @@ class FaqController extends Controller
      */
     public function store(Request $request)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         $request->validate([
             '_token' => 'required|string',
             'question' => 'required|string',
             'answer' => 'required|string'
         ]);
-        
+
         $berita = new Faq;
         $berita->question = $request->question;
         $berita->answer = $request->answer;
-        
+
+        $berita->kode = $request->kode;
         $berita->approved = $request->status;
         $berita->created_at = date("Y-m-d H:i:s");
         // $berita->created_by = Auth::user()->id;
@@ -113,20 +118,24 @@ class FaqController extends Controller
      */
     public function update(Request $request, $id)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         // Decrypt article ID
         $decryptedId = decrypt($id);
 
         // Find article Data
         $berita = Faq::findOrFail($decryptedId);
-        
+
         $request->validate([
             '_token' => 'required|string',
             'question' => 'required|string',
             'answer' => 'required|string'
         ]);
-        
+
         $berita->question = $request->question;
         $berita->answer = $request->answer;
+        $berita->kode = $request->kode;
+
         $berita->approved = $request->status;
         $berita->updated_at = date("Y-m-d H:i:s");
         // $berita->created_by = Auth::user()->id;
@@ -159,13 +168,13 @@ class FaqController extends Controller
         }
     }
 
-    
+
     public function changeStatus(Request $request, $id, $params)
     {
         // print_r($params);die();
-    
+
         $decryptedId = decrypt($id);
-        
+
         $berita = Faq::find($decryptedId);
         $berita->approved = $params;
 

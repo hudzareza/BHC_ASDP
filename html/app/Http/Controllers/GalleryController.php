@@ -22,7 +22,7 @@ class GalleryController extends Controller
      */
 
     // gallery ----------------------------------------------------------------
-    
+
     public function index(): View
     {
         return view('gallery.index');
@@ -37,9 +37,9 @@ class GalleryController extends Controller
     {
         // $beritas = Sliderbanner::all()->sortByDesc('id');
         $beritas = DB::table('sliderbanners')
-        ->select('galleries.*','sliderbanners.*')
-        ->join('galleries', 'galleries.id', '=', 'sliderbanners.id_gallery')
-        ->get();
+            ->select('galleries.*', 'sliderbanners.*')
+            ->join('galleries', 'galleries.id', '=', 'sliderbanners.id_gallery')
+            ->get()->sortByDesc('id');
         // print_r($beritas);die();
         return view('admin.gallery.slideList', compact('beritas'));
     }
@@ -49,18 +49,19 @@ class GalleryController extends Controller
         if (isset($_POST['src'])) {
             $cari = $_POST['src'];
             $beritas = DB::table('galleries')
-            ->where('category','like',"%".$cari."%")
-            ->paginate();
-        }else{
+                ->where('category', 'like', "%" . $cari . "%")
+                ->paginate();
+        } else {
             $beritas = Gallery::all()->sortByDesc('id');
         }
-        
+
         return view('admin.gallery.slideAdd', compact('beritas'));
     }
 
     public function storebanner(Request $request)
     {
-        
+        date_default_timezone_set('Asia/Jakarta');
+
         $berita = new Sliderbanner;
         $berita->id_gallery = $request->id;
         $berita->created_at = date("Y-m-d H:i:s");
@@ -75,7 +76,7 @@ class GalleryController extends Controller
     }
     public function destroyslider($id)
     {
-        
+
         // Decrypt article ID
         $decryptedId = decrypt($id);
         // print_r($decryptedId);die();
@@ -93,7 +94,8 @@ class GalleryController extends Controller
     public function galleryList(): View
     {
         $beritas = Gallery::all()->sortByDesc('id');
-
+        // echo date_default_timezone_get();
+        // die();
         return view('admin.gallery.galleryList', compact('beritas'));
     }
 
@@ -112,24 +114,24 @@ class GalleryController extends Controller
         // print_r($berita);die();
 
         return view('admin.gallery.galleryEdit', compact('berita'));
-        
     }
 
     public function store(Request $request)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         // print_r($_POST);die();
         $request->validate([
-            '_token' => 'required|string',
             'photo' => 'required',
             'category' => 'required|string',
             'caption' => 'required|string'
         ]);
-        
+
         $image_parts = explode(";base64,", $request->photo);
         $image_type_aux = explode("image/", $image_parts[0]);
-        
+
         $image_type = $image_type_aux[1];
-        
+
         // $image_base64 = base64_decode($image_parts[1]);
         // $imageName = uniqid() . '.png';
         // print_r($request->photo);die();
@@ -137,13 +139,13 @@ class GalleryController extends Controller
         // $fileInfo = $request->photo->getClientOriginalName();
         // $fileName = pathinfo($fileInfo, PATHINFO_FILENAME);
         $extension = $image_type;
-        $fileName = time() . rand() .'.' . $extension;
+        $fileName = time() . rand() . '.' . $extension;
 
-        Image::make($request->photo)->resize(1450, 620)->save(public_path() .'/images/article/'. $fileName);
+        Image::make($request->photo)->resize(1450, 620)->save(public_path() . '/images/article/' . $fileName);
 
         // $fileName = time() . '.' . $request->photo->extension();
         // $request->photo->move(public_path() .'/images/article/', $fileName);
-        
+
         $berita = new Gallery;
         $berita->category = $request->category;
         $berita->caption = $request->caption;
@@ -161,6 +163,8 @@ class GalleryController extends Controller
 
     public function update(Request $request, $id)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         // Decrypt article ID
         $decryptedId = decrypt($id);
 
@@ -173,28 +177,28 @@ class GalleryController extends Controller
         //         'caption' => 'required|string'
         //     ]);
         // }else {
-            
+
         $request->validate([
             '_token' => 'required|string',
             'category' => 'required|string',
             'caption' => 'required|string'
         ]);
-        
-        
+
+
         if (empty($request->photo)) {
             $berita->photo = $request->exist;
-        }else {
+        } else {
             $image_parts = explode(";base64,", $request->photo);
             $image_type_aux = explode("image/", $image_parts[0]);
-            
+
             $image_type = $image_type_aux[1];
             $extension = $image_type;
-            $fileName = time() . rand() .'.' . $extension;
-            Image::make($request->photo)->resize(1450, 620)->save(public_path() .'/images/article/'. $fileName);    
-            
-            $berita->photo = $fileName;   
+            $fileName = time() . rand() . '.' . $extension;
+            Image::make($request->photo)->resize(1450, 620)->save(public_path() . '/images/article/' . $fileName);
+
+            $berita->photo = $fileName;
         }
-        
+
         $berita->caption = $request->caption;
         $berita->category = $request->category;
         $berita->updated_at = date("Y-m-d H:i:s");
@@ -221,5 +225,4 @@ class GalleryController extends Controller
             return back()->withSuccess('Failed deleted');
         }
     }
-
 }

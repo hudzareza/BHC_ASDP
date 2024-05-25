@@ -38,11 +38,10 @@ class AdminauthController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         $request->validate([
-            '_token' => 'required|string',
             'name' => 'required|string|max:250',
-            'email' => 'required|email|max:250|unique:users',
+            'email' => 'required|email|max:250',
             'password' => 'required|min:8'
         ]);
         // print_r($_POST);die();
@@ -67,10 +66,10 @@ class AdminauthController extends Controller
         $request->session()->regenerate();
         if ($Usercontent->save()) {
             return redirect()->back()->with('message', 'You have successfully registered and next, please log in');
-        }else{
+        } else {
             return back()->withSuccess('Failed registered');
         }
-            // return redirect()->route('home')
+        // return redirect()->route('home')
         // ->withSuccess('You have successfully registered & logged in!');
     }
 
@@ -98,8 +97,7 @@ class AdminauthController extends Controller
             'password' => 'required'
         ]);
 
-        if(Auth::attempt($credentials))
-        {
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             // return redirect()->back()->with('message', 'You have successfully logged in!');
             return redirect()->route('admin.dashboard')->withSuccess('You have successfully logged in!');
@@ -108,9 +106,8 @@ class AdminauthController extends Controller
         return redirect()->back()->withErrors([
             'email' => 'Your email or password do not match in our records.',
         ])->onlyInput('email');
+    }
 
-    } 
-    
     /**
      * Log out the user from application.
      *

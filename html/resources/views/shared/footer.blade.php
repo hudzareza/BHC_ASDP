@@ -33,8 +33,8 @@
 						</a>
 					</li>
 					<li>
-						<a href="{{ route('jelajah.main') }}">
-							{{ __('navbar.jelajah') }}
+						<a href="{{ route('info.main') }}">
+							{{ __('info.info') }}
 
 						</a>
 					</li>

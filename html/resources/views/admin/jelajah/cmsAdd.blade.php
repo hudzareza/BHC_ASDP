@@ -154,6 +154,10 @@
                 cursor: pointer;
                 font-size: 15px;
             }
+
+            #language-error {
+                margin-bottom: 15px;
+            }
         </style>
         <form id="formBerita" action="{{ route('admin.jelajah.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
@@ -162,7 +166,7 @@
             <div class="uk-card uk-card-default uk-width-1-2@m card">
                 <div class="card-body">
                     <div class="s-desc">
-                        <h4 class="sc-left">Image Thumbnail</h4>
+                        <h4 class="sc-left">Image Thumbnail <span class="text-danger">(* harus diisi)</span></h4>
                         <small class="sc-right text-danger">(Maksimal Upload 20 Mb)</small>
                     </div>
                     <label for="img" class="input-preview">
@@ -194,29 +198,35 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            <button type="button" class="btn btn-primary" id="crop" data-dismiss="modal">Crop</button>
+                            <button type="button" class="btn btn-primary" style="margin-top: auto !important;" id="crop" data-dismiss="modal">Crop</button>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="uk-card uk-card-default uk-width-1-2@m card">
                 <div class="card-body">
-                    <h4>Title</h4>
+                    <h4>Title <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
-                            <input class="uk-input" type="text" placeholder="Ketikan Judul" name="title">
+                            <input class="uk-input" type="text" placeholder="Ketikan Judul" name="title" maxlength="75" id="titleInput">
+                        </div>
+                        <div class="uk-margin">
+                            <span id="charCount">0</span>/75 characters
                         </div>
                     </fieldset>
                     <div class="s-desc">
-                        <h4 class="sc-left">Sub Title </h4>
-                        <small class="sc-right text-danger">(Maksimal 255 Karakter)</small>
+                        <h4 class="sc-left">Sub Title <span class="text-danger">(* harus diisi)</span></h4>
+                        <small class="sc-right text-danger">(Maksimal 150 Karakter)</small>
                     </div>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
-                            <textarea class="uk-textarea" rows="5" placeholder="Sub Judul" name="description"></textarea>
+                            <textarea class="uk-textarea" rows="5" placeholder="Sub Judul" name="description" maxlength="150" id="textInput"></textarea>
+                        </div>
+                        <div class="uk-margin">
+                            <span id="charCountText">0</span>/150 characters
                         </div>
                     </fieldset>
-                    <h4>Content</h4>
+                    <h4>Content <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <textarea id="myTextarea" name="content"></textarea>
@@ -231,7 +241,7 @@
                             <div class="col-sm-4 imgUp">
                                 <div class="imagePreview"></div>
                                 <label class="btn btn-primary">
-                                    Upload<input type="file" class="uploadFile img" value="Upload Photo" name="gallery[]" style="width: 0px;height: 0px;overflow: hidden;" accept="image/jpg, image/png, image/jpeg">
+                                    Upload<input id="multigaleri" type="file" class="uploadFile img" value="Upload Photo" name="gallery[]" style="width: 0px;height: 0px;overflow: hidden;" accept="image/jpg, image/png, image/jpeg">
                                 </label>
                                 <i class="icofont-close del"></i>
                             </div><!-- col-2 -->
@@ -256,21 +266,25 @@
                         </div>
                     </fieldset>
                     <!-- Checkbox for Halaman Depan -->
-                    <h4>Select Languange</h4>
+                    <h4>Select Languange <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
+                        @foreach(App\Models\Language::all()->sortByDesc('id') as $lang)
                         <div class="uk-margin">
                             <label>
-                                <input type="radio" id="front" value="id" name="kode"> Bahasa Indonesia
+                                <input type="radio" id="front" value="{{$lang->kode}}" name="kode"> {{$lang->alias}}
                             </label>
                         </div>
-                        <div class="uk-margin">
+                        @endforeach
+                        <!-- <div class="uk-margin">
                             <label>
                                 <input type="radio" id="front" value="en" name="kode"> English
                             </label>
-                        </div>
+                        </div> -->
                     </fieldset>
                 </div>
-
+                <div id="language-error" class="alert alert-danger d-none">
+                    * Mohon pilih bahasa.
+                </div>
                 <div class="col-12 px-0">
                     <button id="button-save" type="button" class="col-12 button primary icon-label">
                         <span class="inner-icon"><i class="icofont-save"></i></span>
@@ -290,8 +304,29 @@
 
 
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const titleInput = document.getElementById("titleInput");
+        const charCount = document.getElementById("charCount");
+        const textInput = document.getElementById("textInput");
+        const charCountText = document.getElementById("charCountText");
+
+        titleInput.addEventListener("input", function() {
+            charCount.textContent = titleInput.value.length;
+        });
+
+        textInput.addEventListener("input", function() {
+            charCountText.textContent = textInput.value.length;
+        });
+    });
+
+
     $(".imgAdd").click(function() {
-        $(this).closest(".row").find('.imgAdd').before('<div class="col-sm-4 imgUp"><div class="imagePreview"></div><label class="btn btn-primary">Upload<input type="file" accept="image/jpg, image/png, image/jpeg" class="uploadFile img" value="Upload Photo" name="gallery[]" style="width:0px;height:0px;overflow:hidden;"></label><i class="icofont-close del"></i></div>');
+        var imgNum = $('.imgUp').length; // Get the current number of uploaded images
+        if (imgNum < 6) { // Check if the number of uploaded images is less than 6
+            $(this).closest(".row").find('.imgAdd').before('<div class="col-sm-4 imgUp"><div class="imagePreview"></div><label class="btn btn-primary">Upload<input type="file" accept="image/jpg, image/png, image/jpeg" class="uploadFile img" value="Upload Photo" name="gallery[]" style="width:0px;height:0px;overflow:hidden;"></label><i class="icofont-close del"></i></div>');
+        } else {
+            alert("Maksimal 6 foto."); // Display an alert if the maximum limit is reached
+        }
     });
     $(document).on("click", "i.del", function() {
         // 	to remove card
@@ -455,6 +490,7 @@
         });
 
 
+
         $(this).on('click', '#button-save', function(e) {
             e.preventDefault();
             var kontenHTML = tinymce.get('myTextarea').getContent();
@@ -462,9 +498,85 @@
             // Setel nilai input dengan konten HTML
             $("#myTextarea").val(kontenHTML);
             // document.getElementById('myTextarea').value = kontenHTML;
-            submitForm();
-        });
 
+
+
+            // Memeriksa setiap input dalam form
+            var isEmpty1 = false;
+            var isEmpty2 = false;
+            var isEmpty3 = false;
+            var isEmptyRadiobutton = false;
+
+            var inputs = $('#formBerita input[type="text"]');
+
+            inputs.each(function() {
+                // Memeriksa apakah input teks, nomor, atau email kosong
+                if ($(this).val() === '') {
+                    isEmpty1 = true;
+                    // Menampilkan pesan error di samping input yang kosong
+                    $(this).addClass('is-invalid');
+                    $(this).parent().append('<div style="font-size:17px;" class="invalid-feedback">* tidak boleh kosong.</div>');
+                } else {
+                    $(this).removeClass('is-invalid');
+                    $(this).parent().find('.invalid-feedback').remove();
+                }
+
+            });
+
+            var inputsArea = $('#formBerita textarea');
+
+            inputsArea.each(function() {
+                // Memeriksa apakah input teks, nomor, atau email kosong
+                if ($(this).val() === '') {
+                    isEmpty2 = true;
+                    // Menampilkan pesan error di samping input yang kosong
+                    $(this).addClass('is-invalid');
+                    $(this).parent().append('<div style="font-size:17px;" class="invalid-feedback">* tidak boleh kosong.</div>');
+                } else {
+                    $(this).removeClass('is-invalid');
+                    $(this).parent().find('.invalid-feedback').remove();
+                }
+
+            });
+
+            var inputsFile = $('#formBerita input[name="photo"]');
+
+            inputsFile.each(function() {
+                // Memeriksa apakah input teks, nomor, atau email kosong
+                if ($(this).val() === '') {
+                    isEmpty3 = true;
+                    // Menampilkan pesan error di samping input yang kosong
+                    $(this).addClass('is-invalid');
+                    $(this).parent().append('<div style="font-size:17px;" class="invalid-feedback">* tidak boleh kosong.</div>');
+                } else {
+                    $(this).removeClass('is-invalid');
+                    $(this).parent().find('.invalid-feedback').remove();
+                }
+
+            });
+
+            // Mendapatkan nilai radio button yang dipilih
+            var selectedOption = $('#formBerita input[name="kode"]:checked').val();
+
+            // Memeriksa apakah radio button telah dipilih
+            if (!$('input[name="kode"]').is(':checked')) {
+                $('#language-error').removeClass('d-none'); // Show the error message
+                isEmptyRadiobutton = true;
+            } else {
+                $('#language-error').addClass('d-none'); // Hide the error message
+                isEmptyRadiobutton = false;
+            }
+            // console.log(isEmpty1, isEmpty2, isEmpty3, isEmptyRadiobutton);
+
+            // Jika ada input yang kosong, hentikan proses pengiriman formulir
+            if (isEmpty1 === true || isEmpty2 === true || isEmpty3 === true || isEmptyRadiobutton === true) {
+                return false;
+            } else {
+                // Jika semua input sudah diisi, kirim formulir
+                submitForm();
+            }
+
+        });
     });
 
     async function addDataForm() {

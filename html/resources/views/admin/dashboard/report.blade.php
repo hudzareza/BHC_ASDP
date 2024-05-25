@@ -13,11 +13,17 @@
 @section('content-title')
 
 <div class="row mb-2">
-    <div class="col-5 d-flex align-items-center">
+    <div class="col-3 d-flex align-items-center">
         Goers Report
     </div>
-    <div class="col-2 d-flex align-items-right">
-
+    <div class="col-5 d-flex align-items-center">
+        <?php
+        if (!isset($_GET['startdate'])) {
+            echo "";
+        } else {
+            echo "Tanggal : " . date("d-m-Y", strtotime($_GET['startdate'])) . " s/d " . date("d-m-Y", strtotime($_GET['enddate']));
+        }
+        ?>
     </div>
     <div class="col-4">
         <form action="{{route('admin.report')}}" method="get">
@@ -28,15 +34,20 @@
                 <div class="col-10 d-flex align-items-center">
                     <div class="input-group date" data-provide="datepicker">
                         <input type="date" name="date" value="" class="form-control" data-date-format="yyyy-mm-dd" />
-                        <div class="input-group-addon">
+                        <!-- <div class="input-group-addon">
                             <span class="glyphicon glyphicon-th"></span>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
         </form>
     </div>
 </div>
+<style>
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        display: none;
+    }
+</style>
 <script>
     $(function() {
         $('input[name="date"]').daterangepicker();
@@ -54,17 +65,16 @@
 <div class="row mb-2">
     <div class="col-5">
         <button id="btnExport" class="btn btn-success btn-sm">Export to CSV</button>
-
         <!-- @if(isset($_GET['date']))
-    <a class="btn btn-success btn-sm" href="{{route('admin.report.csv')}}?date={{$_GET['date']}}">Export to CSV</a>
-    @else
-    <a class="btn btn-success btn-sm" href="{{route('admin.report.csv')}}">Export to CSV</a>
-    @endif -->
-
+        <a class="btn btn-success btn-sm" href="{{route('admin.report.csv')}}?date={{$_GET['date']}}">Export to CSV</a>
+        @else
+        <a class="btn btn-success btn-sm" href="{{route('admin.report.csv')}}">Export to CSV</a>
+        @endif -->
     </div>
-    <div class="col-3"></div>
+    <div class="col-3">
+    </div>
     <div class="col-4">
-
+        <a href="{{ route('admin.report') }}" style="float: right;" class="btn btn-danger btn-sm">Reset Filter</a>
     </div>
 </div>
 @endsection
@@ -116,24 +126,22 @@
         </div>
     </div>
     <div class="col-lg-3 col-md-3 col-sm-3">
-        <a href="">
-            <div class="d-widget soft-red">
-                <div class="d-widget-title">
-                    <h5>Total User</h5>
-                </div>
-                <div class="d-widget-content">
-                    <span class="realtime-ico pulse"></span>
-                    <h5>{{$userCount}}</h5>
-                    <i class="icofont-optic"></i>
-                </div>
+        <div class="d-widget soft-red">
+            <div class="d-widget-title">
+                <h5>Total User</h5>
             </div>
-        </a>
+            <div class="d-widget-content">
+                <span class="realtime-ico pulse"></span>
+                <h5>{{$userCount}}</h5>
+                <i class="icofont-optic"></i>
+            </div>
+        </div>
     </div>
 </div>
 <div class="row merged20 mb-4">
     <div class="col-lg-12">
         <div class="d-widget">
-            <table class="table table-default all-events table-striped table-responsive-lg">
+            <table id="myTable">
                 <thead>
                     <tr>
                         <th>Order Number</th>

@@ -28,7 +28,7 @@ class goers_data extends Command
     public function handle()
     {
 
-        date_default_timezone_set('UTC');
+        date_default_timezone_set('Asia/Jakarta');
 
         // $start_date = date('Y-m-d');
         // $end_date = date('Y-m-d');

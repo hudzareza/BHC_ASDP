@@ -90,43 +90,43 @@
             @method("POST")
             <div class="uk-card uk-card-default uk-width-1-2@m card">
                 <div class="card-body">
-                    <h4>Div "Alamat"</h4>
+                    <h4>Div "Alamat" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" value="{{$footer->deskripsi ?? ''}}" type="text" placeholder="" name="deskripsi">
                         </div>
                     </fieldset>
-                    <h4>Div "Halaman"</h4>
+                    <h4>Div "Halaman" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" value="{{$footer->halaman ?? ''}}" type="text" placeholder="" name="halaman">
                         </div>
                     </fieldset>
-                    <h4>Div "Kontak Kami"</h4>
+                    <h4>Div "Kontak Kami" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" value="{{$footer->kontak_kami ?? ''}}" type="text" placeholder="" name="kontak_kami">
                         </div>
                     </fieldset>
-                    <h4>Div "Email"</h4>
+                    <h4>Div "Email" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" value="{{$footer->email ?? ''}}" type="text" placeholder="" name="email">
                         </div>
                     </fieldset>
-                    <h4>Div "Whatsapp"</h4>
+                    <h4>Div "Whatsapp" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" type="text" value="{{$footer->whatsapp ?? ''}}" placeholder="" name="whatsapp">
                         </div>
                     </fieldset>
-                    <h4>Div "Ikuti Kami"</h4>
+                    <h4>Div "Ikuti Kami" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" type="text" value="{{$footer->ikuti_kami ?? ''}}" placeholder="" name="ikuti_kami">
                         </div>
                     </fieldset>
-                    <h4>Div "Hak Cipta"</h4>
+                    <h4>Div "Hak Cipta" <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <input class="uk-input" type="text" value="{{$footer->hak_cipta ?? ''}}" placeholder="" name="hak_cipta">
@@ -183,7 +183,29 @@
         $(this).on('click', '#button-save', function(e) {
             e.preventDefault();
 
-            submitForm();
+            // Memeriksa setiap input dalam form
+            var inputs = $('#formBerita input[type="text"]');
+            var isEmpty = false;
+
+            inputs.each(function() {
+                if ($(this).val() === '') {
+                    isEmpty = true;
+                    // Menampilkan pesan error di samping input yang kosong
+                    $(this).addClass('is-invalid');
+                    $(this).parent().append('<div style="font-size:17px;" class="invalid-feedback">* tidak boleh kosong.</div>');
+                } else {
+                    $(this).removeClass('is-invalid');
+                    $(this).parent().find('.invalid-feedback').remove();
+                }
+            });
+
+            // Jika ada input yang kosong, hentikan proses pengiriman formulir
+            if (isEmpty) {
+                return false;
+            } else {
+                // Jika semua input sudah diisi, kirim formulir
+                submitForm();
+            }
         });
 
 

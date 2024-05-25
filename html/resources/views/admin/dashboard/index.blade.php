@@ -125,14 +125,15 @@
                 });
         });
 
-        // datatable start
+        // datatable start 5
         $(document).ready(function() {
-            $('#myTable').DataTable({
+            $('#myTableContact').DataTable({
                 "columnDefs": [{
                         "width": "50px",
                         "targets": 0
                     }, // Kolom pertama
                     {
+                        "orderable": false,
                         "width": "200px",
                         "targets": 1
                     }, // Kolom kedua
@@ -145,8 +146,239 @@
                         "targets": 3
                     },
                     {
+                        "orderable": false,
+                        "width": "300px",
+                        "targets": 4
+                    },
+                ]
+            });
+        });
+
+        // datatable start 5 bahasa
+        $(document).ready(function() {
+            $('#myTableBahasa').DataTable({
+                "columnDefs": [{
+                        "width": "50px",
+                        "targets": 0
+                    }, // Kolom pertama
+                    {
+                        // "orderable": false,
+                        "width": "200px",
+                        "targets": 1
+                    }, // Kolom kedua
+                    {
+                        "width": "200px",
+                        "targets": 2
+                    }, // Kolom ketiga
+                    {
+                        "width": "300px",
+                        "targets": 3
+                    },
+                    {
+                        "orderable": false,
+                        "width": "300px",
+                        "targets": 4
+                    },
+                ]
+            });
+        });
+
+        // datatable start 8
+        $(document).ready(function() {
+            $('#myTableEvent').DataTable({
+                "columnDefs": [{
+                        "width": "50px",
+                        "targets": 0
+                    }, // Kolom pertama
+                    {
+                        "orderable": false,
+                        "width": "200px",
+                        "targets": 1
+                    }, // Kolom kedua
+                    {
+                        "width": "200px",
+                        "targets": 2
+                    }, // Kolom ketiga
+                    {
+                        "width": "300px",
+                        "targets": 3
+                    },
+                    {
+                        // "orderable": false,
                         "width": "200px",
                         "targets": 4
+                    },
+                    {
+                        // "orderable": false,
+                        "width": "200px",
+                        "targets": 5
+                    },
+                    {
+                        // "orderable": false,
+                        "width": "200px",
+                        "targets": 6
+                    },
+                    {
+                        "orderable": false,
+                        "width": "200px",
+                        "targets": 7
+                    },
+                ]
+            });
+        });
+
+        // datatable start 4
+        $(document).ready(function() {
+            $('#myTableList').DataTable({
+                "columnDefs": [{
+                        "width": "50px",
+                        "targets": 0
+                    }, // Kolom pertama
+                    {
+                        "orderable": false,
+                        "width": "200px",
+                        "targets": 1
+                    }, // Kolom kedua
+                    {
+                        "width": "200px",
+                        "targets": 2
+                    }, // Kolom ketiga
+                    {
+                        "orderable": false,
+                        "width": "300px",
+                        "targets": 3
+                    },
+                ]
+            });
+        });
+
+        // datatable start 4
+        $(document).ready(function() {
+            $('#myTableRole').DataTable({
+                "columnDefs": [{
+                        "width": "50px",
+                        "targets": 0
+                    }, // Kolom pertama
+                    {
+                        // "orderable": false,
+                        "width": "200px",
+                        "targets": 1
+                    }, // Kolom kedua
+                    {
+                        "width": "200px",
+                        "targets": 2
+                    }, // Kolom ketiga
+                    {
+                        "orderable": false,
+                        "width": "300px",
+                        "targets": 3
+                    },
+                ]
+            });
+        });
+
+        // datatable start 6
+        $(document).ready(function() {
+            $('#myTableFaq').DataTable({
+                "columnDefs": [{
+                        "width": "50px",
+                        "targets": 0
+                    }, // Kolom pertama
+                    {
+                        "orderable": false,
+                        "width": "200px",
+                        "targets": 1
+                    }, // Kolom kedua
+                    {
+                        "width": "200px",
+                        "targets": 2
+                    }, // Kolom ketiga
+                    {
+                        "width": "300px",
+                        "targets": 3
+                    },
+                    {
+                        // "orderable": false,
+                        "width": "200px",
+                        "targets": 4
+                    },
+                    {
+                        "orderable": false,
+                        "width": "200px",
+                        "targets": 5
+                    },
+                ]
+            });
+        });
+
+        // datatable start 6
+        $(document).ready(function() {
+            $('#myTableUser').DataTable({
+                "columnDefs": [{
+                        "width": "50px",
+                        "targets": 0
+                    }, // Kolom pertama
+                    {
+                        // "orderable": false,
+                        "width": "200px",
+                        "targets": 1
+                    }, // Kolom kedua
+                    {
+                        "width": "200px",
+                        "targets": 2
+                    }, // Kolom ketiga
+                    {
+                        "width": "300px",
+                        "targets": 3
+                    },
+                    {
+                        // "orderable": false,
+                        "width": "200px",
+                        "targets": 4
+                    },
+                    {
+                        "orderable": false,
+                        "width": "200px",
+                        "targets": 5
+                    },
+                ]
+            });
+        });
+
+        // datatable start 7
+        $(document).ready(function() {
+            $('#myTableJelajah').DataTable({
+                "columnDefs": [{
+                        "width": "50px",
+                        "targets": 0
+                    }, // Kolom pertama
+                    {
+                        "orderable": false,
+                        "width": "200px",
+                        "targets": 1
+                    }, // Kolom kedua
+                    {
+                        "width": "200px",
+                        "targets": 2
+                    }, // Kolom ketiga
+                    {
+                        "width": "300px",
+                        "targets": 3
+                    },
+                    {
+                        // "orderable": false,
+                        "width": "200px",
+                        "targets": 4
+                    },
+                    {
+                        // "orderable": false,
+                        "width": "200px",
+                        "targets": 5
+                    },
+                    {
+                        "orderable": false,
+                        "width": "200px",
+                        "targets": 6
                     },
                 ]
             });

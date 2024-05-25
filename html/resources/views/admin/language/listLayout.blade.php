@@ -111,6 +111,14 @@
                             <div class="button soft-primary"><a href="{{ route('admin.add.contact', $id) }}">Add</a></div>
                         </td>
                     </tr>
+                    <tr>
+                        <td>
+                            Halaman Profile
+                        </td>
+                        <td>
+                            <div class="button soft-primary"><a href="{{ route('admin.add.profile', $id) }}">Add</a></div>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>

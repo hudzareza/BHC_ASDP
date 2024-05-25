@@ -83,13 +83,16 @@
             @method("POST")
             <div class="uk-card uk-card-default uk-width-1-2@m card">
                 <div class="card-body">
-                    <h4>Question</h4>
+                    <h4>Question <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
-                            <input class="uk-input" type="text" placeholder="Ketikan Pertanyaan" name="question">
+                            <input maxlength="75" id="textInput1" class="uk-input" type="text" placeholder="Ketikan Pertanyaan" name="question">
+                        </div>
+                        <div class="uk-margin">
+                            <span id="charCountText1">0</span>/75 characters
                         </div>
                     </fieldset>
-                    <h4>Answer</h4>
+                    <h4>Answer <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <textarea id="myTextarea" name="answer"></textarea>
@@ -113,15 +116,24 @@
                             </select>
                         </div>
                     </fieldset>
-                    <!-- <h4>Halaman Depan</h4>
+                    <h4>Select Languange <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
+                        @foreach(App\Models\Language::all()->sortByDesc('id') as $lang)
                         <div class="uk-margin">
-                            <select class="uk-select" id="front">
-                                <option value="ya">Ya</option>
-                                <option value="tidak" selected>Tidak</option>
-                            </select>
+                            <label>
+                                <input type="radio" id="front" value="{{$lang->kode}}" name="kode"> {{$lang->alias}}
+                            </label>
                         </div>
-                    </fieldset> -->
+                        @endforeach
+                        <!-- <div class="uk-margin">
+                            <label>
+                                <input type="radio" id="front" value="en" name="kode"> English
+                            </label>
+                        </div> -->
+                    </fieldset>
+                </div>
+                <div id="language-error" class="alert alert-danger d-none">
+                    * Mohon pilih bahasa.
                 </div>
                 <div class="col-12 px-0">
                     <button id="button-save" type="button" class="col-12 button primary icon-label">
@@ -140,6 +152,14 @@
 <script src="{{ asset('backend/js/summernote.min.js') }}"></script>
 <script src="{{ asset('backend/js/tinymce.min.js') }}"></script>
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const titleInput = document.getElementById("textInput1");
+        const charCount = document.getElementById("charCountText1");
+
+        titleInput.addEventListener("input", function() {
+            charCount.textContent = titleInput.value.length;
+        });
+    });
     $(document).ready(function() {
         $.ajaxSetup({
             headers: {
@@ -166,6 +186,7 @@
 
         tinymce.init({
             selector: '#myTextarea',
+            forced_root_block: false,
             // width: 600,
             // height: 300,
             plugins: [
@@ -188,17 +209,75 @@
             // Setel nilai input dengan konten HTML
             $("#myTextarea").val(kontenHTML);
             // document.getElementById('myTextarea').value = kontenHTML;
-            submitForm();
+
+
+            // Memeriksa setiap input dalam form
+            var isEmpty1 = false;
+            var isEmpty2 = false;
+            var isEmptyRadiobutton = false;
+
+            var inputs = $('#formBerita input[type="text"]');
+
+            inputs.each(function() {
+                // Memeriksa apakah input teks, nomor, atau email kosong
+                if ($(this).val() === '') {
+                    isEmpty1 = true;
+                    // Menampilkan pesan error di samping input yang kosong
+                    $(this).addClass('is-invalid');
+                    $(this).parent().append('<div style="font-size:17px;" class="invalid-feedback">* tidak boleh kosong.</div>');
+                } else {
+                    $(this).removeClass('is-invalid');
+                    $(this).parent().find('.invalid-feedback').remove();
+                }
+
+            });
+
+            var inputsArea = $('#formBerita textarea');
+
+            inputsArea.each(function() {
+                // Memeriksa apakah input teks, nomor, atau email kosong
+                if ($(this).val() === '') {
+                    isEmpty2 = true;
+                    // Menampilkan pesan error di samping input yang kosong
+                    $(this).addClass('is-invalid');
+                    $(this).parent().append('<div style="font-size:17px;" class="invalid-feedback">* tidak boleh kosong.</div>');
+                } else {
+                    $(this).removeClass('is-invalid');
+                    $(this).parent().find('.invalid-feedback').remove();
+                }
+
+            });
+
+            // Mendapatkan nilai radio button yang dipilih
+            var selectedOption = $('#formBerita input[name="kode"]:checked').val();
+
+            // Memeriksa apakah radio button telah dipilih
+            if (!$('input[name="kode"]').is(':checked')) {
+                $('#language-error').removeClass('d-none'); // Show the error message
+                isEmptyRadiobutton = true;
+            } else {
+                $('#language-error').addClass('d-none'); // Hide the error message
+                isEmptyRadiobutton = false;
+            }
+            // console.log(isEmpty1, isEmpty2, isEmpty3, isEmptyRadiobutton);
+
+            // Jika ada input yang kosong, hentikan proses pengiriman formulir
+            if (isEmpty1 === true || isEmpty2 === true || isEmptyRadiobutton === true) {
+                return false;
+            } else {
+                // Jika semua input sudah diisi, kirim formulir
+                submitForm();
+            }
         });
 
 
     });
 
     async function addDataForm() {
-        var valueStatus = $('#status').val();
-        // var valueFront = $('#front').val();
-        $('#formBerita').append('<input type="hidden" name="status" value="' + valueStatus + '" /> ');
-        // $('#formBerita').append('<input type="hidden" name="is_front" value="'+valueFront+'" /> ');
+        var valueStatus = $('input[name="kode"]:checked').val();
+        var valueFront = $('#status').val();
+        $('#formBerita').append('<input type="hidden" name="kode" value="' + valueStatus + '" /> ');
+        $('#formBerita').append('<input type="hidden" name="status" value="' + valueFront + '" /> ');
         return;
     }
 

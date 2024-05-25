@@ -15,7 +15,7 @@
 @section('content-title')
 <div class="row mb-2">
     <div class="col-8 d-flex align-items-center">
-    Ticket
+        Ticket
     </div>
     <div class="col-4">
         <div class="input-group">
@@ -35,21 +35,23 @@
                 display: block;
                 max-width: 100%;
             }
+
             .preview {
                 text-align: center;
                 overflow: hidden;
-                width: 160px; 
+                width: 160px;
                 height: 160px;
                 margin: 10px;
                 border: 1px solid red;
             }
-            
-            .section{
-                margin-top:150px;
-                background:#fff;
-                padding:50px 30px;
+
+            .section {
+                margin-top: 150px;
+                background: #fff;
+                padding: 50px 30px;
             }
-            .modal-lg{
+
+            .modal-lg {
                 max-width: 1000px !important;
             }
 
@@ -113,7 +115,7 @@
                     <label for="img" class="input-preview">
                         <input id="img" class="image" type="file" accept="image/jpg, image/png, image/jpeg">
                     </label>
-                    <input name="exist" value="{{$berita->photo}}" type="hidden"/>
+                    <input name="exist" value="{{$berita->photo}}" type="hidden" />
 
                     <input name="photo" type="hidden" id="hidden" />
                 </div>
@@ -125,7 +127,7 @@
                         <div class="modal-header">
                             <h5 class="modal-title" id="modalLabel"></h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
+                                <span aria-hidden="true">×</span>
                             </button>
                         </div>
                         <div class="modal-body">
@@ -142,7 +144,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            <button type="button" class="btn btn-primary" id="crop" data-dismiss="modal">Crop</button>
+                            <button type="button" class="btn btn-primary" style="margin-top: auto !important;" id="crop" data-dismiss="modal">Crop</button>
                         </div>
                     </div>
                 </div>
@@ -153,13 +155,20 @@
                     <h4>Name</h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
-                            <input class="uk-input" value="{{$berita->name}}" type="text" placeholder="Ketikan nama tiket" name="name">
+                            <input maxlength="50" id="textInput1" class="uk-input" value="{{$berita->name}}" type="text" placeholder="Ketikan nama tiket" name="name">
+                        </div>
+                        <div class="uk-margin">
+                            <span id="charCountText1">0</span>/50 characters
                         </div>
                     </fieldset>
-                    <h4>Url</h4>
+                    <h4>URL</h4>
                     <fieldset class="uk-fieldset">
+                        <small class="sc-right text-danger">(Contoh : www.website.com | www.website.id | website.com | website.id)</small>
                         <div class="uk-margin">
-                            <input class="uk-input" value="{{$berita->url}}" type="text" placeholder="Ketikan url" name="url">
+                            <input maxlength="50" id="textInput2" class="uk-input" value="{{$berita->url}}" type="text" placeholder="Ketikan URL" name="url">
+                        </div>
+                        <div class="uk-margin">
+                            <span id="charCountText2">0</span>/50 characters
                         </div>
                     </fieldset>
                     <!-- <input type="hidden" name="id" value="{{$berita->id}}"> -->
@@ -175,18 +184,18 @@
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <select class="uk-select" id="status">
-                            
-                                    {{$stat = ''}}
-                                    @if($berita->approved == '0')
-                                        {{$stat = 'Draft'}}
-                                        <option value="{{$berita->approved}}" selected>{{$stat}}</option>
-                                        <option value="1">Publish</option>
-                                    @elseif($berita->approved == '1')
-                                        {{$stat = 'Publish'}}
-                                        <option value="{{$berita->approved}}" selected>{{$stat}}</option>
-                                        <option value="0">Draft</option>
-                                    @endif
-                                    
+
+                                {{$stat = ''}}
+                                @if($berita->approved == '0')
+                                {{$stat = 'Draft'}}
+                                <option value="{{$berita->approved}}" selected>{{$stat}}</option>
+                                <option value="1">Publish</option>
+                                @elseif($berita->approved == '1')
+                                {{$stat = 'Publish'}}
+                                <option value="{{$berita->approved}}" selected>{{$stat}}</option>
+                                <option value="0">Draft</option>
+                                @endif
+
                             </select>
                         </div>
                     </fieldset>
@@ -216,6 +225,20 @@
 <script src="{{ asset('frontend/js/dropzone.min.js') }}"></script>
 <script src="{{ asset('backend/js/summernote.min.js') }}"></script>
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const titleInput = document.getElementById("textInput1");
+        const charCount = document.getElementById("charCountText1");
+        const textInput = document.getElementById("textInput2");
+        const charCountText = document.getElementById("charCountText2");
+
+        titleInput.addEventListener("input", function() {
+            charCount.textContent = titleInput.value.length;
+        });
+
+        textInput.addEventListener("input", function() {
+            charCountText.textContent = textInput.value.length;
+        });
+    });
     $(document).ready(function() {
         $.ajaxSetup({
             headers: {
@@ -230,11 +253,11 @@
         var cropper;
         const filePreview = document.querySelector('.input-preview');
 
-        filePreview.style.backgroundImage  = "url({{ asset('images/article/'.$berita->photo) }})";
+        filePreview.style.backgroundImage = "url({{ asset('images/article/'.$berita->photo) }})";
 
-        $("body").on("change", ".image", function(e){
+        $("body").on("change", ".image", function(e) {
             var files = e.target.files;
-            var done = function (url) {
+            var done = function(url) {
                 image.src = url;
                 $modal.modal('show');
             };
@@ -250,26 +273,26 @@
                     done(URL.createObjectURL(file));
                 } else if (FileReader) {
                     reader = new FileReader();
-                    reader.onload = function (e) {
+                    reader.onload = function(e) {
                         done(reader.result);
                     };
-                reader.readAsDataURL(file);
+                    reader.readAsDataURL(file);
                 }
             }
         });
 
-        $modal.on('shown.bs.modal', function () {
+        $modal.on('shown.bs.modal', function() {
             cropper = new Cropper(image, {
-                aspectRatio: 60/60,
+                aspectRatio: 60 / 60,
                 viewMode: 3,
                 preview: '.preview'
             });
-        }).on('hidden.bs.modal', function () {
+        }).on('hidden.bs.modal', function() {
             cropper.destroy();
             cropper = null;
         });
 
-        $("#crop").click(function(){
+        $("#crop").click(function() {
             canvas = cropper.getCroppedCanvas({
                 width: 60,
                 height: 60,
@@ -286,13 +309,13 @@
             canvas.toBlob(function(blob) {
                 url = URL.createObjectURL(blob);
                 //  console.log(url);
-                
+
                 var reader = new FileReader();
                 reader.readAsDataURL(blob);
                 reader.onloadend = function() {
                     var base64data = reader.result;
                     // console.log(base64data);
-                    filePreview.style.backgroundImage  = "url("+base64data+")";
+                    filePreview.style.backgroundImage = "url(" + base64data + ")";
                     filePreview.classList.add("has-image");
                     hidden.value = base64data;
                 }
@@ -304,14 +327,14 @@
         // const fileImage = document.querySelector('.input-preview__src');
         // const filePreview = document.querySelector('.input-preview');
 
-        // filePreview.style.backgroundImage  = "url({{ asset('images/article/ticket/'.$berita->photo) }})";
+        // filePreview.style.backgroundImage  = "url({{ asset('images/article/'.$berita->photo) }})";
 
         // fileImage.onchange = function () {
         //     const reader = new FileReader();
 
         //     reader.onload = function (e) {
         //         // get loaded data and render thumbnail.
-                
+
         //         filePreview.style.backgroundImage  = "url("+e.target.result+")";
         //         filePreview.classList.add("has-image");
         //     };
@@ -343,7 +366,7 @@
     async function addDataForm() {
         var valueStatus = $('#status').val();
         // var valueFront = $('#front').val();
-        $('#formBerita').append('<input type="hidden" name="status" value="'+valueStatus+'" /> ');
+        $('#formBerita').append('<input type="hidden" name="status" value="' + valueStatus + '" /> ');
         // $('#formBerita').append('<input type="hidden" name="is_front" value="'+valueFront+'" /> ');
         return;
     }

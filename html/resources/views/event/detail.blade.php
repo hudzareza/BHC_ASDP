@@ -103,7 +103,69 @@
 												<a href="{{ route('event.main') }}/{{$berita->id}}/detail">
 													<p class="title">{{$berita->title}}</p>
 												</a>
-												<p class="date">{{$berita->created_at}}</p>
+												<?php
+												if ($berita->year == '4') {
+													$year = '2023';
+												} elseif ($berita->year == '5') {
+													$year = '2024';
+												} elseif ($berita->year == '6') {
+													$year = '2025';
+												} elseif ($berita->year == '7') {
+													$year = '2026';
+												} elseif ($berita->year == '8') {
+													$year = '2027';
+												} elseif ($berita->year == '9') {
+													$year = '2028';
+												} elseif ($berita->year == '10') {
+													$year = '2029';
+												} elseif ($berita->year == '11') {
+													$year = '2030';
+												} elseif ($berita->year == '12') {
+													$year = '2031';
+												} elseif ($berita->year == '13') {
+													$year = '2032';
+												} elseif ($berita->year == '14') {
+													$year = '2033';
+												} elseif ($berita->year == '15') {
+													$year = '2034';
+												} elseif ($berita->year == '16') {
+													$year = '2035';
+												} elseif ($berita->year == '1') {
+													$year = '2020';
+												} elseif ($berita->year == '2') {
+													$year = '2021';
+												} elseif ($berita->year == '3') {
+													$year = '2022';
+												}
+
+
+												if ($berita->month == '1') {
+													$monthName = 'Januari';
+												} elseif ($berita->month == '2') {
+													$monthName = 'Februari';
+												} elseif ($berita->month == '3') {
+													$monthName = 'Maret';
+												} elseif ($berita->month == '4') {
+													$monthName = 'April';
+												} elseif ($berita->month == '5') {
+													$monthName = 'Mei';
+												} elseif ($berita->month == '6') {
+													$monthName = 'Juni';
+												} elseif ($berita->month == '7') {
+													$monthName = 'Juli';
+												} elseif ($berita->month == '8') {
+													$monthName = 'Agustus';
+												} elseif ($berita->month == '9') {
+													$monthName = 'September';
+												} elseif ($berita->month == '10') {
+													$monthName = 'Oktober';
+												} elseif ($berita->month == '11') {
+													$monthName = 'November';
+												} elseif ($berita->month == '12') {
+													$monthName = 'Desember';
+												}
+												?>
+												<p class="date">{{$monthName}} {{$year}}</p>
 											</div>
 										</div>
 									</div>

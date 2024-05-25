@@ -21,22 +21,34 @@ class InfoController extends Controller
      */
     public function index(): View
     {
+        $kode = app()->getLocale();
+
         $beritas = DB::table('infos')
-        ->where('approved','=',"1")
-        ->latest()->take(6)->get();
+            ->where('approved', '=', "1")
+            ->where('kode', '=', $kode)
+            ->latest()->take(6)->get();
 
         return view('info.index', compact('beritas'));
     }
 
     public function detail($id): View
     {
-        // print_r($id);die();
-        $data = DB::table('infos')
-        ->where('id','=',$id)->get();
-        // print_r($data);die();
-        // print_r($photo);die();
-        $beritas = Info::where('approved','=','1')->latest()->paginate(4);
-        return view('info.detail', compact('data','beritas'));
+        $kode = app()->getLocale();
+
+        $data = DB::table('infos')->where('id', '=', $id)->get();
+
+        $beritas = Info::where('approved', '=', '1')->where('kode', '=', $kode)->latest()->paginate(4);
+
+        $side = Info::where('approved', '=', '1')->where('kode', '=', $kode)->latest()->paginate();
+        $sideArr = json_decode(json_encode($side), true);
+
+        // Membuat array baru tanpa elemen yang memiliki nilai $id
+        $filteredSide = array_filter($sideArr['data'], function ($item) use ($id) {
+            return $item['id'] != $id;
+        });
+
+        // Output array setelah menghapus elemen yang memiliki nilai $valueToRemove
+        return view('info.detail', compact('data', 'beritas', 'filteredSide'));
     }
 
     // admin 
@@ -68,7 +80,10 @@ class InfoController extends Controller
      */
     public function store(Request $request)
     {
-        // print_r($_POST);die();
+        date_default_timezone_set('Asia/Jakarta');
+
+        // print_r($_POST);
+        // die();
         $request->validate([
             // '_token' => 'required|string',
             'photo' => 'required',
@@ -76,23 +91,25 @@ class InfoController extends Controller
             'description' => 'required|string',
             'content' => 'required|string'
         ]);
-        
+
         $image_parts = explode(";base64,", $request->photo);
         $image_type_aux = explode("image/", $image_parts[0]);
-        
+
         $image_type = $image_type_aux[1];
         $extension = $image_type;
-        $fileName = time() . rand() .'.' . $extension;
+        $fileName = time() . rand() . '.' . $extension;
 
-        Image::make($request->photo)->resize(1920, 1200)->save(public_path() .'/images/article/'. $fileName);
+        Image::make($request->photo)->resize(1920, 1200)->save(public_path() . '/images/article/' . $fileName);
 
         // $fileName = time() . '.' . $request->photo->extension();
         // $request->photo->move(public_path() .'/images/article/', $fileName);
-        
+
         $berita = new Info;
         $berita->title = $request->title;
         $berita->content = $request->content;
         $berita->photo = $fileName;
+        $berita->kode = $request->kode;
+
         if ($request->has('description')) {
             $berita->description = $request->description;
         }
@@ -147,6 +164,8 @@ class InfoController extends Controller
      */
     public function update(Request $request, $id)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         // Decrypt article ID
         $decryptedId = decrypt($id);
 
@@ -159,25 +178,26 @@ class InfoController extends Controller
             'description' => 'required|string',
             'content' => 'required|string'
         ]);
-        
+
         if (empty($request->photo)) {
             $berita->photo = $request->exist;
-        }else {
+        } else {
             $image_parts = explode(";base64,", $request->photo);
             $image_type_aux = explode("image/", $image_parts[0]);
-            
+
             $image_type = $image_type_aux[1];
             $extension = $image_type;
-            $fileName = time() . rand() .'.' . $extension;
+            $fileName = time() . rand() . '.' . $extension;
 
-            Image::make($request->photo)->resize(1920, 1200)->save(public_path() .'/images/article/'. $fileName);    
-            
+            Image::make($request->photo)->resize(1920, 1200)->save(public_path() . '/images/article/' . $fileName);
+
             $berita->photo = $fileName;
         }
 
         $berita->title = $request->title;
         $berita->content = $request->content;
-        
+        $berita->kode = $request->kode;
+
         if ($request->has('description')) {
             $berita->description = $request->description;
         }
@@ -214,13 +234,13 @@ class InfoController extends Controller
         }
     }
 
-    
+
     public function changeStatus(Request $request, $id, $params)
     {
         // print_r($params);die();
-    
+
         $decryptedId = decrypt($id);
-        
+
         $berita = Info::find($decryptedId);
         $berita->approved = $params;
 

@@ -15,7 +15,7 @@
 @section('content-title')
 <div class="row mb-2">
     <div class="col-8 d-flex align-items-center">
-    Event
+        Event
     </div>
     <div class="col-4">
         <div class="input-group">
@@ -35,21 +35,23 @@
                 display: block;
                 max-width: 100%;
             }
+
             .preview {
                 text-align: center;
                 overflow: hidden;
-                width: 160px; 
+                width: 160px;
                 height: 160px;
                 margin: 10px;
                 border: 1px solid red;
             }
-            
-            .section{
-                margin-top:150px;
-                background:#fff;
-                padding:50px 30px;
+
+            .section {
+                margin-top: 150px;
+                background: #fff;
+                padding: 50px 30px;
             }
-            .modal-lg{
+
+            .modal-lg {
                 max-width: 1000px !important;
             }
 
@@ -113,7 +115,7 @@
                     <label for="img" class="input-preview">
                         <input id="img" class="image" type="file" accept="image/jpg, image/png, image/jpeg">
                     </label>
-                    <input name="exist" value="{{$berita->photo}}" type="hidden"/>
+                    <input name="exist" value="{{$berita->photo}}" type="hidden" />
                     <input name="photo" type="hidden" id="hidden" />
                 </div>
             </div>
@@ -123,7 +125,7 @@
                         <div class="modal-header">
                             <h5 class="modal-title" id="modalLabel"></h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
+                                <span aria-hidden="true">×</span>
                             </button>
                         </div>
                         <div class="modal-body">
@@ -140,7 +142,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            <button type="button" class="btn btn-primary" id="crop" data-dismiss="modal">Crop</button>
+                            <button type="button" class="btn btn-primary" style="margin-top: auto !important;" id="crop" data-dismiss="modal">Crop</button>
                         </div>
                     </div>
                 </div>
@@ -150,16 +152,22 @@
                     <h4>Title</h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
-                            <input class="uk-input" value="{{$berita->title}}" type="text" placeholder="Ketikan Judul" name="title">
+                            <input maxlength="75" id="titleInput" class="uk-input" value="{{$berita->title}}" type="text" placeholder="Ketikan Judul" name="title">
+                        </div>
+                        <div class="uk-margin">
+                            <span id="charCount">0</span>/75 characters
                         </div>
                     </fieldset>
                     <div class="s-desc">
                         <h4 class="sc-left">Sub Title </h4>
-                        <small class="sc-right text-danger">(Maksimal 255 Karakter)</small>
+                        <small class="sc-right text-danger">(Maksimal 150 Karakter)</small>
                     </div>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
-                            <textarea class="uk-textarea" rows="5" placeholder="Sub Judul" name="description">{{$berita->description}}</textarea>
+                            <textarea maxlength="150" id="textInput" class="uk-textarea" rows="5" placeholder="Sub Judul" name="description">{{$berita->description}}</textarea>
+                        </div>
+                        <div class="uk-margin">
+                            <span id="charCountText">0</span>/150 characters
                         </div>
                     </fieldset>
                     <h4>Content</h4>
@@ -182,17 +190,17 @@
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <select class="uk-select" id="status">
-                            
-                                    {{$stat = ''}}
-                                    @if($berita->approved == '0')
-                                        {{$stat = 'Draft'}}
-                                        <option value="{{$berita->approved}}" selected>{{$stat}}</option>
-                                        <option value="1">Publish</option>
-                                    @elseif($berita->approved == '1')
-                                        {{$stat = 'Publish'}}
-                                        <option value="{{$berita->approved}}" selected>{{$stat}}</option>
-                                        <option value="0">Draft</option>
-                                    @endif
+
+                                {{$stat = ''}}
+                                @if($berita->approved == '0')
+                                {{$stat = 'Draft'}}
+                                <option value="{{$berita->approved}}" selected>{{$stat}}</option>
+                                <option value="1">Publish</option>
+                                @elseif($berita->approved == '1')
+                                {{$stat = 'Publish'}}
+                                <option value="{{$berita->approved}}" selected>{{$stat}}</option>
+                                <option value="0">Draft</option>
+                                @endif
                             </select>
                         </div>
                     </fieldset>
@@ -200,26 +208,84 @@
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <select class="uk-select" id="month">
-                                <option value="{{$berita->month}}" selected>{{$month[0]->name}}</option>
+
                                 @foreach($monthlist as $bulan)
-                                <option value="{{$bulan['id']}}">{{$bulan['name']}}</option>
+                                <?php
+                                $selected = "";
+                                if ($bulan['id'] == $berita->month) {
+                                    $selected = "selected";
+                                }
+                                ?>
+                                <option value="{{$bulan['id']}}" <?php echo $selected; ?>>{{$bulan['name']}}</option>
                                 @endforeach
                             </select>
                         </div>
                     </fieldset>
-                    
+
                     <h4>Event Year</h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
                             <select class="uk-select" id="year">
-                                <option value="{{$berita->year}}" selected>{{$year[0]->name}}</option>
+                                <?php
+                                if ($berita->year == '4') {
+                                    $yName = '2023';
+                                } elseif ($berita->year == '5') {
+                                    $yName = '2024';
+                                } elseif ($berita->year == '6') {
+                                    $yName = '2025';
+                                } elseif ($berita->year == '7') {
+                                    $yName = '2026';
+                                } elseif ($berita->year == '8') {
+                                    $yName = '2027';
+                                } elseif ($berita->year == '9') {
+                                    $yName = '2028';
+                                } elseif ($berita->year == '10') {
+                                    $yName = '2029';
+                                } elseif ($berita->year == '11') {
+                                    $yName = '2030';
+                                } elseif ($berita->year == '12') {
+                                    $yName = '2031';
+                                } elseif ($berita->year == '13') {
+                                    $yName = '2032';
+                                } elseif ($berita->year == '14') {
+                                    $yName = '2033';
+                                } elseif ($berita->year == '15') {
+                                    $yName = '2034';
+                                } elseif ($berita->year == '16') {
+                                    $yName = '2035';
+                                } elseif ($berita->year == '1') {
+                                    $yName = '2020';
+                                } elseif ($berita->year == '2') {
+                                    $yName = '2021';
+                                } elseif ($berita->year == '3') {
+                                    $yName = '2022';
+                                }
+                                ?>
+
+                                <option value="{{$berita->year}}" selected>{{$yName}}</option>
                                 @foreach($yearlist as $tahun)
                                 <option value="{{$tahun['id']}}">{{$tahun['name']}}</option>
                                 @endforeach
                             </select>
                         </div>
                     </fieldset>
-                    
+
+                    <h4>Select Languange</h4>
+                    <fieldset class="uk-fieldset">
+                        @foreach(App\Models\Language::all()->sortByDesc('id') as $lang)
+                        <div class="uk-margin">
+                            <label>
+                                <input type="radio" id="front" value="{{$lang->kode}}" name="kode" <?php if ($berita->kode == $lang->kode) echo 'checked'; ?>> {{$lang->alias}}
+                            </label>
+                        </div>
+                        @endforeach
+                        <!-- <div class="uk-margin">
+                            <label>
+                                <input type="radio" id="front" value="en" name="kode"> English
+                            </label>
+                        </div> -->
+                    </fieldset>
+
                 </div>
                 <div class="col-12 px-0">
                     <button id="button-save" type="button" class="col-12 button primary icon-label">
@@ -239,6 +305,20 @@
 <script src="{{ asset('backend/js/tinymce.min.js') }}"></script>
 
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const titleInput = document.getElementById("titleInput");
+        const charCount = document.getElementById("charCount");
+        const textInput = document.getElementById("textInput");
+        const charCountText = document.getElementById("charCountText");
+
+        titleInput.addEventListener("input", function() {
+            charCount.textContent = titleInput.value.length;
+        });
+
+        textInput.addEventListener("input", function() {
+            charCountText.textContent = textInput.value.length;
+        });
+    });
     $(document).ready(function() {
         $.ajaxSetup({
             headers: {
@@ -253,11 +333,11 @@
         var cropper;
         const filePreview = document.querySelector('.input-preview');
 
-        filePreview.style.backgroundImage  = "url({{ asset('images/article/'.$berita->photo) }})";
+        filePreview.style.backgroundImage = "url({{ asset('images/article/'.$berita->photo) }})";
 
-        $("body").on("change", ".image", function(e){
+        $("body").on("change", ".image", function(e) {
             var files = e.target.files;
-            var done = function (url) {
+            var done = function(url) {
                 image.src = url;
                 $modal.modal('show');
             };
@@ -273,26 +353,26 @@
                     done(URL.createObjectURL(file));
                 } else if (FileReader) {
                     reader = new FileReader();
-                    reader.onload = function (e) {
+                    reader.onload = function(e) {
                         done(reader.result);
                     };
-                reader.readAsDataURL(file);
+                    reader.readAsDataURL(file);
                 }
             }
         });
 
-        $modal.on('shown.bs.modal', function () {
+        $modal.on('shown.bs.modal', function() {
             cropper = new Cropper(image, {
-                aspectRatio: 1920/1200,
+                aspectRatio: 1920 / 1200,
                 viewMode: 3,
                 preview: '.preview'
             });
-        }).on('hidden.bs.modal', function () {
+        }).on('hidden.bs.modal', function() {
             cropper.destroy();
             cropper = null;
         });
 
-        $("#crop").click(function(){
+        $("#crop").click(function() {
 
             // var originalWidth = cropper.getImageData().naturalWidth;
             // var originalHeight = cropper.getImageData().naturalHeight;
@@ -318,13 +398,13 @@
             canvas.toBlob(function(blob) {
                 url = URL.createObjectURL(blob);
                 //  console.log(url);
-                
+
                 var reader = new FileReader();
                 reader.readAsDataURL(blob);
                 reader.onloadend = function() {
                     var base64data = reader.result;
                     // console.log(base64data);
-                    filePreview.style.backgroundImage  = "url("+base64data+")";
+                    filePreview.style.backgroundImage = "url(" + base64data + ")";
                     filePreview.classList.add("has-image");
                     hidden.value = base64data;
                 }
@@ -343,7 +423,7 @@
 
         //     reader.onload = function (e) {
         //         // get loaded data and render thumbnail.
-                
+
         //         filePreview.style.backgroundImage  = "url("+e.target.result+")";
         //         filePreview.classList.add("has-image");
         //     };
@@ -370,14 +450,14 @@
             // width: 600,
             // height: 300,
             plugins: [
-            'advlist autolink link image lists charmap preview hr anchor pagebreak',
-            'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
-            'table template paste'
+                'advlist autolink link image lists charmap preview hr anchor pagebreak',
+                'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+                'table template paste'
             ],
             toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | ' +
-            'bullist numlist outdent indent | link | preview fullscreen | ' +
-            'forecolor backcolor',
-            
+                'bullist numlist outdent indent | link | preview fullscreen | ' +
+                'forecolor backcolor',
+
             menubar: false
         });
 
@@ -397,9 +477,11 @@
         var valueStatus = $('#status').val();
         var valueMonth = $('#month').val();
         var valueYear = $('#year').val();
-        $('#formBerita').append('<input type="hidden" name="status" value="'+valueStatus+'" /> ');
-        $('#formBerita').append('<input type="hidden" name="month" value="'+valueMonth+'" /> ');
-        $('#formBerita').append('<input type="hidden" name="year" value="'+valueYear+'" /> ');
+        var valueKode = $('input[name="kode"]:checked').val();
+        $('#formBerita').append('<input type="hidden" name="status" value="' + valueStatus + '" /> ');
+        $('#formBerita').append('<input type="hidden" name="month" value="' + valueMonth + '" /> ');
+        $('#formBerita').append('<input type="hidden" name="year" value="' + valueYear + '" /> ');
+        $('#formBerita').append('<input type="hidden" name="kode" value="' + valueKode + '" /> ');
         return;
     }
 

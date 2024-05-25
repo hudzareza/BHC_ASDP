@@ -152,16 +152,16 @@
                     });
                 });
             </script>
-            <table class="table table-default all-events table-striped table-responsive-lg">
+            <table id="myTableEvent">
                 <thead>
                     <tr>
                         <th>#</th>
                         <th>Photo</th>
+                        <th>Language</th>
                         <th>Title</th>
-                        <th>Sub Title</th>
                         <th>Month</th>
                         <th>Year</th>
-                        <th>Activity Information</th>
+                        <!-- <th>Activity Information</th> -->
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -179,10 +179,10 @@
                                 <img alt="posted-image" src="{{ asset('images/article/'.$berita->photo) }}">
                             </div>
                         </td>
+                        <td>{{$berita->kode}}</td>
                         <td>
                             {{$berita->title}}
                         </td>
-                        <td>{{$berita->description}}</td>
                         <td>
                             <?php
                             if ($berita->month == '1') {
@@ -251,14 +251,14 @@
                             ?>
                             {{$year}}
                         </td>
-                        <td>
+                        <!-- <td>
                             <ul>
-                                <!-- <li>Created by : {{$berita->created_by}}</li> -->
+                                <li>Created by : {{$berita->created_by}}</li>
                                 <li>Created at : {{$berita->created_at}}</li>
                                 <li>Edited at : {{$berita->updated_at}}</li>
-                                <!-- <li>Publish at : {{$berita->approved_at}}</li> -->
+                                <li>Publish at : {{$berita->approved_at}}</li>
                             </ul>
-                        </td>
+                        </td> -->
                         <td>
                             @if($berita->approved =='1')
                             <span class="badge bg-warning">Publish</span>
@@ -289,7 +289,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="7">Empty</td>
+                        <td>Empty</td>
                     </tr>
                     @endforelse
                 </tbody>

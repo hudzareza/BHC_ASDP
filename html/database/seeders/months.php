@@ -13,6 +13,7 @@ class months extends Seeder
      */
     public function run(): void
     {
+
         DB::table('months')->insert([
             'name' => 'Januari',
         ]);

@@ -16,9 +16,9 @@
 					<p class="title">{{__('info.info')}}</p>
 					<nav aria-label="breadcrumb">
 						<ol class="breadcrumbs">
-							<li class="breadcrumb-item"><a href="index.html">{{__('navbar.beranda')}}</a></li>
+							<li class="breadcrumb-item"><a href="{{route('home')}}">{{__('navbar.beranda')}}</a></li>
 							<li class="breadcrumb-item"><img src="{{ asset('assets/images/arrow-right.png') }}"></li>
-							<li class="breadcrumb-item"><a href="index.html">{{__('info.info')}}</a></li>
+							<li class="breadcrumb-item"><a href="{{route('info.main')}}">{{__('info.info')}}</a></li>
 							<li class="breadcrumb-item"><img src="{{ asset('assets/images/arrow-right.png') }}"></li>
 							<li class="breadcrumb-item active notranslate" aria-current="page">{{__('info.detail')}}</li>
 						</ol>
@@ -44,7 +44,7 @@
 											<path id="Vector" d="M19 4H18V3C18 2.45 17.55 2 17 2C16.45 2 16 2.45 16 3V4H8V3C8 2.45 7.55 2 7 2C6.45 2 6 2.45 6 3V4H5C3.89 4 3.01 4.9 3.01 6L3 20C3 21.1 3.89 22 5 22H19C20.1 22 21 21.1 21 20V6C21 4.9 20.1 4 19 4ZM19 19C19 19.55 18.55 20 18 20H6C5.45 20 5 19.55 5 19V9H19V19ZM7 11H9V13H7V11ZM11 11H13V13H11V11ZM15 11H17V13H15V11Z" fill="#41484D" />
 										</g>
 									</svg>
-									<p class="date">{{$data[0]->created_at}} WIB</p>
+									<p class="date">{{$data[0]->updated_at}} WIB</p>
 								</div>
 								<div>
 									<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -61,6 +61,7 @@
 								{!! $data[0]->content !!}
 							</p>
 						</article>
+
 						<div class="d-flex hidemobile">
 							<div class="flex-fill">
 								<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -73,10 +74,11 @@
 										</clipPath>
 									</defs>
 								</svg>
-								<a href="{{ route('info.main') }}/{{$beritas[0]->id}}/detail">{{$beritas[0]->title}}</a>
+
+								<a href="{{ route('info.main') }}/{{$filteredSide[0]['id']}}/detail">{{$filteredSide[0]['title']}}</a>
 							</div>
 							<div class="flex-fill text-right">
-								<a href="{{ route('info.main') }}/{{$beritas[0]->id}}/detail">{{$beritas[0]->title}}</a>
+								<a href="{{ route('info.main') }}/{{$filteredSide[1]['id']}}/detail">{{$filteredSide[1]['title']}}</a>
 								<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 									<g id="Keyboard arrow right" clip-path="url(#clip0_34_78)">
 										<path id="Vector" d="M8.59009 16.59L13.1701 12L8.59009 7.41L10.0001 6L16.0001 12L10.0001 18L8.59009 16.59Z" fill="#001B3F" />

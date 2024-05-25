@@ -19,6 +19,7 @@ class HomeController extends Controller
     public function index(): View
     {
         // return view('articles.coming');
+        $kode = app()->getLocale();
 
         $banner =  DB::table('sliderbanners')
             ->select('galleries.*', 'sliderbanners.*')
@@ -27,10 +28,12 @@ class HomeController extends Controller
 
         $data['main'] = DB::table('articles')
             ->where('approved', '=', "1")
+            ->where('kode', '=', $kode)
             ->paginate(3);
 
         $data['info'] = DB::table('infos')
             ->where('approved', '=', "1")
+            ->where('kode', '=', $kode)
             ->latest()->take(6)->get();
         // print_r($banner);die();
         return view('articles.index', compact('banner', 'data'));

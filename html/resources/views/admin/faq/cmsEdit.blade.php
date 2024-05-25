@@ -88,7 +88,10 @@
                     <h4>Question</h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
-                            <input class="uk-input" value="{{$berita->question}}" type="text" placeholder="" name="question">
+                            <input maxlength="75" id="textInput1" class="uk-input" value="{{$berita->question}}" type="text" placeholder="" name="question">
+                        </div>
+                        <div class="uk-margin">
+                            <span id="charCountText1">0</span>/75 characters
                         </div>
                     </fieldset>
                     <h4>Answer</h4>
@@ -126,15 +129,21 @@
                             </select>
                         </div>
                     </fieldset>
-                    <!-- <h4>Halaman Depan</h4>
+                    <h4>Select Languange</h4>
                     <fieldset class="uk-fieldset">
+                        @foreach(App\Models\Language::all()->sortByDesc('id') as $lang)
                         <div class="uk-margin">
-                            <select class="uk-select" id="front">
-                                <option value="ya">Ya</option>
-                                <option value="tidak" selected>Tidak</option>
-                            </select>
+                            <label>
+                                <input type="radio" id="front" value="{{$lang->kode}}" name="kode" <?php if ($berita->kode == $lang->kode) echo 'checked'; ?>> {{$lang->alias}}
+                            </label>
                         </div>
-                    </fieldset> -->
+                        @endforeach
+                        <!-- <div class="uk-margin">
+                            <label>
+                                <input type="radio" id="front" value="en" name="kode"> English
+                            </label>
+                        </div> -->
+                    </fieldset>
                 </div>
                 <div class="col-12 px-0">
                     <button id="button-save" type="button" class="col-12 button primary icon-label">
@@ -152,6 +161,14 @@
 <script src="{{ asset('frontend/js/dropzone.min.js') }}"></script>
 <script src="{{ asset('backend/js/summernote.min.js') }}"></script>
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const titleInput = document.getElementById("textInput1");
+        const charCount = document.getElementById("charCountText1");
+
+        titleInput.addEventListener("input", function() {
+            charCount.textContent = titleInput.value.length;
+        });
+    });
     $(document).ready(function() {
         $.ajaxSetup({
             headers: {
@@ -176,6 +193,7 @@
 
         tinymce.init({
             selector: '#myTextarea',
+            forced_root_block: false,
             // width: 600,
             // height: 300,
             plugins: [
@@ -203,10 +221,10 @@
     });
 
     async function addDataForm() {
-        var valueStatus = $('#status').val();
-        // var valueFront = $('#front').val();
-        $('#formBerita').append('<input type="hidden" name="status" value="' + valueStatus + '" /> ');
-        // $('#formBerita').append('<input type="hidden" name="is_front" value="'+valueFront+'" /> ');
+        var valueStatus = $('input[name="kode"]:checked').val();
+        var valueFront = $('#status').val();
+        $('#formBerita').append('<input type="hidden" name="kode" value="' + valueStatus + '" /> ');
+        $('#formBerita').append('<input type="hidden" name="status" value="' + valueFront + '" /> ');
         return;
     }
 

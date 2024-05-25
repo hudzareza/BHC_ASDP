@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('ticket_lang', function (Blueprint $table) {
             $table->id();
-            $table->string('id_bahasa');
+            $table->unsignedBigInteger('id_bahasa');
+            $table->foreign('id_bahasa')->references('id')->on('languages')->onDelete('cascade');
             $table->string('kode')->nullable();
             $table->string('header');
             $table->string('btn_tiket');

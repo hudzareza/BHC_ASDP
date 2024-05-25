@@ -32,8 +32,10 @@ class ProfileController extends Controller
 
     public function infostore(Request $request)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         $decryptedId = decrypt($request->id);
-        
+
         $berita = User::findOrFail($decryptedId);
 
         $berita->name = $request->name;
@@ -56,23 +58,24 @@ class ProfileController extends Controller
 
     public function passstore(Request $request)
     {
-        
+        date_default_timezone_set('Asia/Jakarta');
+
         $decryptedId = decrypt($request->id);
-        
+
         $berita = User::findOrFail($decryptedId);
 
         // $old_password = Hash::make($request->password);
 
         if (Hash::check($request->password, $berita->password)) {
-            if($request->password_confirmation != $request->new_password){
+            if ($request->password_confirmation != $request->new_password) {
                 return redirect()->back()->with('error', 'Confirmation password not same!');
-            }else{
+            } else {
                 $request->validate([
                     '_token' => 'required|string',
                     'password' => 'required|min:8',
                     'new_password' => 'required|min:8'
                 ]);
-        
+
                 $berita->password = Hash::make($request->new_password);
                 $berita->created_at = date("Y-m-d H:i:s");
                 // $berita->created_by = Auth::user()->name;
@@ -82,9 +85,8 @@ class ProfileController extends Controller
                     return redirect()->back()->with('error', 'Failed edit password!');
                 }
             }
-        }else {
-            return redirect()->back()->with('error', "The old password doesn't match!");   
+        } else {
+            return redirect()->back()->with('error', "The old password doesn't match!");
         }
-        
     }
 }

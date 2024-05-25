@@ -85,14 +85,22 @@
                 <div class="card-body">
                     <h4>Name</h4>
                     <fieldset class="uk-fieldset">
+                        <small class="sc-right text-danger">(Maksimal 50 Karakter)</small>
                         <div class="uk-margin">
-                            <input value="{{$berita->name}}" class="uk-input" type="text" placeholder="Nama" name="name">
+                            <input maxlength="50" id="textInput1" value="{{$berita->name}}" class="uk-input" type="text" placeholder="Nama" name="name">
+                        </div>
+                        <div class="uk-margin">
+                            <span id="charCountText1">0</span>/50 characters
                         </div>
                     </fieldset>
                     <h4>Alias</h4>
                     <fieldset class="uk-fieldset">
+                        <small class="sc-right text-danger">(Maksimal 50 Karakter)</small>
                         <div class="uk-margin">
-                            <input value="{{$berita->alias}}" class="uk-input" type="text" placeholder="Alias" name="alias">
+                            <input maxlength="50" id="textInput2" value="{{$berita->alias}}" class="uk-input" type="text" placeholder="Alias" name="alias">
+                        </div>
+                        <div class="uk-margin">
+                            <span id="charCountText2">0</span>/50 characters
                         </div>
                     </fieldset>
                 </div>
@@ -159,6 +167,20 @@
 <script src="{{ asset('frontend/js/dropzone.min.js') }}"></script>
 <script src="{{ asset('backend/js/summernote.min.js') }}"></script>
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const titleInput = document.getElementById("textInput1");
+        const charCount = document.getElementById("charCountText1");
+        const textInput = document.getElementById("textInput2");
+        const charCountText = document.getElementById("charCountText2");
+
+        titleInput.addEventListener("input", function() {
+            charCount.textContent = titleInput.value.length;
+        });
+
+        textInput.addEventListener("input", function() {
+            charCountText.textContent = textInput.value.length;
+        });
+    });
     $(document).ready(function() {
         $.ajaxSetup({
             headers: {

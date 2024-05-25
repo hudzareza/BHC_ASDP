@@ -15,7 +15,7 @@
 @section('content-title')
 <div class="row mb-2">
     <div class="col-8 d-flex align-items-center">
-    Master Banner
+        Master Banner
     </div>
     <div class="col-4">
         <div class="input-group">
@@ -35,21 +35,23 @@
                 display: block;
                 max-width: 100%;
             }
+
             .preview {
                 text-align: center;
                 overflow: hidden;
-                width: 160px; 
+                width: 160px;
                 height: 160px;
                 margin: 10px;
                 border: 1px solid red;
             }
-            
-            .section{
-                margin-top:150px;
-                background:#fff;
-                padding:50px 30px;
+
+            .section {
+                margin-top: 150px;
+                background: #fff;
+                padding: 50px 30px;
             }
-            .modal-lg{
+
+            .modal-lg {
                 max-width: 1000px !important;
             }
 
@@ -107,7 +109,7 @@
             <div class="uk-card uk-card-default uk-width-1-2@m card">
                 <div class="card-body">
                     <div class="s-desc">
-                        <h4 class="sc-left">Image Thumbnail</h4>
+                        <h4 class="sc-left">Image Thumbnail <span class="text-danger">(* harus diisi)</span></h4>
                         <small class="sc-right text-danger">(Ukuran fit banner 1450 x 620)</small>
                     </div>
                     <label for="img" class="input-preview">
@@ -124,7 +126,7 @@
                         <div class="modal-header">
                             <h5 class="modal-title" id="modalLabel"></h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
+                                <span aria-hidden="true">×</span>
                             </button>
                         </div>
                         <div class="modal-body">
@@ -141,24 +143,30 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            <button type="button" class="btn btn-primary" id="crop" data-dismiss="modal">Crop</button>
+                            <button type="button" style="margin-top: auto !important;" class="btn btn-primary" id="crop" data-dismiss="modal">Crop</button>
                         </div>
                     </div>
                 </div>
             </div>
-            
+
             <div class="uk-card uk-card-default uk-width-1-2@m card">
                 <div class="card-body">
-                    <h4>Category</h4>
+                    <h4>Category <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
-                            <input class="uk-input" type="text" placeholder="" name="category">
+                            <input maxlength="50" id="textInput1" class="uk-input" type="text" placeholder="" name="category">
+                        </div>
+                        <div class="uk-margin">
+                            <span id="charCountText1">0</span>/50 characters
                         </div>
                     </fieldset>
-                    <h4>Caption</h4>
+                    <h4>Caption <span class="text-danger">(* harus diisi)</span></h4>
                     <fieldset class="uk-fieldset">
                         <div class="uk-margin">
-                            <input class="uk-input" type="text" placeholder="" name="caption">
+                            <input maxlength="50" id="textInput2" class="uk-input" type="text" placeholder="" name="caption">
+                        </div>
+                        <div class="uk-margin">
+                            <span id="charCountText2">0</span>/50 characters
                         </div>
                     </fieldset>
                 </div>
@@ -166,12 +174,12 @@
         </form>
     </div>
     <script>
-        
+
     </script>
     <div class="col-lg-4 col-12">
         <div class="uk-card uk-card-default uk-width-1-2@m card">
             <div class="card-body">
-                
+
                 <div class="col-12 px-0">
                     <button id="button-save" type="button" class="col-12 button primary icon-label">
                         <span class="inner-icon"><i class="icofont-save"></i></span>
@@ -188,6 +196,20 @@
 <script src="{{ asset('frontend/js/dropzone.min.js') }}"></script>
 <script src="{{ asset('backend/js/summernote.min.js') }}"></script>
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const titleInput = document.getElementById("textInput1");
+        const charCount = document.getElementById("charCountText1");
+        const textInput = document.getElementById("textInput2");
+        const charCountText = document.getElementById("charCountText2");
+
+        titleInput.addEventListener("input", function() {
+            charCount.textContent = titleInput.value.length;
+        });
+
+        textInput.addEventListener("input", function() {
+            charCountText.textContent = textInput.value.length;
+        });
+    });
     $(document).ready(function() {
         $.ajaxSetup({
             headers: {
@@ -201,9 +223,9 @@
         var image = document.getElementById('image');
         var cropper;
 
-        $("body").on("change", ".image", function(e){
+        $("body").on("change", ".image", function(e) {
             var files = e.target.files;
-            var done = function (url) {
+            var done = function(url) {
                 image.src = url;
                 $modal.modal('show');
             };
@@ -219,26 +241,26 @@
                     done(URL.createObjectURL(file));
                 } else if (FileReader) {
                     reader = new FileReader();
-                    reader.onload = function (e) {
+                    reader.onload = function(e) {
                         done(reader.result);
                     };
-                reader.readAsDataURL(file);
+                    reader.readAsDataURL(file);
                 }
             }
         });
 
-        $modal.on('shown.bs.modal', function () {
+        $modal.on('shown.bs.modal', function() {
             cropper = new Cropper(image, {
-                aspectRatio: 1450/620,
+                aspectRatio: 1450 / 620,
                 viewMode: 3,
                 preview: '.preview'
             });
-        }).on('hidden.bs.modal', function () {
+        }).on('hidden.bs.modal', function() {
             cropper.destroy();
             cropper = null;
         });
 
-        $("#crop").click(function(){
+        $("#crop").click(function() {
 
             // var originalWidth = cropper.getImageData().naturalWidth;
             // var originalHeight = cropper.getImageData().naturalHeight;
@@ -264,13 +286,13 @@
             canvas.toBlob(function(blob) {
                 url = URL.createObjectURL(blob);
                 //  console.log(url);
-                
+
                 var reader = new FileReader();
                 reader.readAsDataURL(blob);
                 reader.onloadend = function() {
                     var base64data = reader.result;
                     // console.log(base64data);
-                    filePreview.style.backgroundImage  = "url("+base64data+")";
+                    filePreview.style.backgroundImage = "url(" + base64data + ")";
                     filePreview.classList.add("has-image");
                     hidden.value = base64data;
                 }
@@ -310,16 +332,38 @@
         $(this).on('click', '#button-save', function(e) {
             e.preventDefault();
 
-            submitForm();
+            // Memeriksa setiap input dalam form
+            var inputs = $('#formBerita input[type="text"], input[name="photo"]');
+            var isEmpty = false;
+
+            inputs.each(function() {
+                if ($(this).val() === '') {
+                    isEmpty = true;
+                    // Menampilkan pesan error di samping input yang kosong
+                    $(this).addClass('is-invalid');
+                    $(this).parent().append('<div style="font-size:17px;" class="invalid-feedback">* tidak boleh kosong.</div>');
+                } else {
+                    $(this).removeClass('is-invalid');
+                    $(this).parent().find('.invalid-feedback').remove();
+                }
+            });
+
+            // Jika ada input yang kosong, hentikan proses pengiriman formulir
+            if (isEmpty) {
+                return false;
+            } else {
+                // Jika semua input sudah diisi, kirim formulir
+                submitForm();
+            }
         });
 
-        
+
     });
 
     async function addDataForm() {
         var valueStatus = $('#status').val();
         // var valueFront = $('#front').val();
-        $('#formBerita').append('<input type="hidden" name="status" value="'+valueStatus+'" /> ');
+        $('#formBerita').append('<input type="hidden" name="status" value="' + valueStatus + '" /> ');
         // $('#formBerita').append('<input type="hidden" name="is_front" value="'+valueFront+'" /> ');
         return;
     }
